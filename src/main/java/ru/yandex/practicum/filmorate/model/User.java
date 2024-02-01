@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
- * Film.
+ * User.
  */
 @Data
 @NoArgsConstructor
-public class Film {
+public class User {
 
     // добавить библиотеку валидации и добавить аннотации для полей
 
     private Integer id;
+    private String email;
+    private String login;
     private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private long duration;
+    private LocalDate birthday;
 }
