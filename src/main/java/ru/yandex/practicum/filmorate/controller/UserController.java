@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashMap;
@@ -13,27 +12,30 @@ public class UserController {
 
     private final Map<Integer, User> userStorage = new HashMap<>();
 
-    // добавить логирование
-
     @GetMapping
     public HashMap<Integer, User> getUsers() {
+
+        // добавить логирование
+
         return new HashMap<>(userStorage);
     }
 
-    @PutMapping
-    public String addUser(@RequestBody User newUser) throws ValidationException {
+    @PostMapping
+    public String addUser(@RequestBody User newUser) {
 
-        // написать логику
+        // реализовать логику
+        // добавить логирование
 
-        return newUser + " успешно добавлен.";
+        return newUser + " успешно добавлен";
     }
 
-    @PostMapping
-    public String updateOrAddUser(@RequestBody User user) throws ValidationException {
+    @PutMapping
+    public String updateOrAddUser(@RequestBody User user) {
 
-        // написать логику
+        // реализовать логику
+        // добавить логирование
 
-        return user + " обновлен или добавлен.";
+        return user + " обновлен или добавлен";
     }
 
 }
