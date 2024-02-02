@@ -13,6 +13,7 @@ import java.time.LocalDate;
 /**
  * User.
  */
+
 @Data
 @AllArgsConstructor
 @Slf4j
