@@ -33,14 +33,4 @@ public class User {
     @PastOrPresent(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
 
-
-    // имя для отображения может быть пустым — в таком случае будет использован логин
-    private String getNameIfEmpty(String name, String login) {
-        if (name.isEmpty() || name.isBlank()) {
-            log.info("Поле имени использует адрес эл.почты");
-            return login;
-        }
-        return name;
-    }
-
 }

@@ -2,11 +2,13 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
 
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 
 @RestController
@@ -14,16 +16,24 @@ import java.util.TreeMap;
 @Slf4j
 public class FilmController {
 
-    private final Map<Integer, Film> filmStorage = new TreeMap<>();
+    private final Map<Integer, Film> filmStorage = new HashMap<>();
+    private int generatorId = 0;
 
     @GetMapping
-    public Map<Integer, Film> getFilms() {
+    public Collection<Film> getFilms() {
         log.info("Список всех фильмов получен");
-        return new TreeMap<>(filmStorage);
+        return filmStorage.values();
     }
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film newFilm) {
+        for (Film film : filmStorage.values()) {
+            if (film.getName().equals(newFilm.getName())
+                    && film.getReleaseDate().equals(newFilm.getReleaseDate())) {
+                throw new ValidationException("Фильм уже был добавлен");
+            }
+        }
+        newFilm.setId(getNextId());
         filmStorage.put(newFilm.getId(), newFilm);
         log.info("Фильм добавлен");
         return newFilm;
@@ -34,6 +44,10 @@ public class FilmController {
         filmStorage.put(film.getId(), film);
         log.info("Фильм обновлен или добавлен");
         return film;
+    }
+
+    private int getNextId() {
+        return ++generatorId;
     }
 
 }
