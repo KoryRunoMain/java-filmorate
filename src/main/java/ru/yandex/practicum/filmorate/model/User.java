@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
  */
 @Data
 @AllArgsConstructor
+@Slf4j
 public class User {
 
     private Integer id;
@@ -35,6 +37,7 @@ public class User {
     // имя для отображения может быть пустым — в таком случае будет использован логин
     private String getNameIfEmpty(String name, String login) {
         if (name.isEmpty() || name.isBlank()) {
+            log.info("Поле имени использует адрес эл.почты");
             return login;
         }
         return name;

@@ -3,11 +3,12 @@ package ru.yandex.practicum.filmorate.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final Map<Integer, User> userStorage = new HashMap<>();
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String addUser(@RequestBody User newUser) {
+    public String addUser(@Valid @RequestBody User newUser) {
 
         // реализовать логику
         // добавить логирование
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping
-    public String updateOrAddUser(@RequestBody User user) {
+    public String updateOrAddUser(@Valid @RequestBody User user) {
 
         // реализовать логику
         // добавить логирование
