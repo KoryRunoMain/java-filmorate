@@ -1,4 +1,4 @@
-package validations;
+package ru.yandex.practicum.filmorate.validations;
 
 import javax.validation.Constraint;
 import java.lang.annotation.*;

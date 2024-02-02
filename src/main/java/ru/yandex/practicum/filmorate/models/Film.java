@@ -1,8 +1,8 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import validations.ReleaseDateConstraint;
+import ru.yandex.practicum.filmorate.validations.ReleaseDateConstraint;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
