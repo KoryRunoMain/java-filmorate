@@ -3,13 +3,10 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-
 import ru.yandex.practicum.filmorate.models.User;
-
+import ru.yandex.practicum.filmorate.validations.ValidateUser;
 import javax.validation.Valid;
-
 import java.util.*;
 
 @RestController
@@ -17,6 +14,7 @@ import java.util.*;
 @Slf4j
 public class UserController {
 
+    private final ValidateUser validate = new ValidateUser();
     private final Map<Integer, User> userStorage = new HashMap<>();
 
     @GetMapping
@@ -28,6 +26,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User newUser) {
         if (!userStorage.containsKey(newUser.getId())) {
+            validate.validateUser(newUser);
             newUser.setId(userStorage.size() + 1);
             userStorage.put(newUser.getId(), newUser);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -37,6 +36,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<User> updateOrCreateUser(@Valid @RequestBody User user) {
+        validate.validateUser(user);
         userStorage.put(user.getId(), user);
         log.info("Пользователь добавлен или обновлен");
         return new ResponseEntity<>(user, HttpStatus.OK);

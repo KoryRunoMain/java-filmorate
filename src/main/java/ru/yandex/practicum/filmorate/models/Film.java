@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.validations.ReleaseDateConstraint;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,11 +24,9 @@ public class Film {
 
     @Size(max = 200, message = "максимальная длина описания — 200 символов")
     @NotNull(message = "описание не может быть null")
-    @NotBlank(message = "описание не может быть пустым")
     private String description;
 
     @NotNull(message = "релиз не может быть null")
-    @ReleaseDateConstraint(message = "Дата релиза должна быть после 28 декабря 1895 года")
     private LocalDate releaseDate;
 
     @NotNull(message = "продолжительность не может быть null")

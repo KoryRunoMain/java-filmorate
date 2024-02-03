@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.validations.NotSpaceConstraint;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -18,13 +17,10 @@ public class User {
 
     @NotNull(message = "электронная почта не может быть null")
     @NotBlank(message = "электронная почта не может быть пустой")
-    @Email(regexp = ".+@.+\\..+", message = "неправильный формат e-mail")
     private String email;
 
     @NotNull(message = "логин не может быть null")
     @NotBlank(message = "логин не может быть пустым")
-//    @Pattern(regexp = "^[^\\s]+$", message = "логин не может содержать пробелы")
-    @NotSpaceConstraint(message = "логин не может содержать пробелы")
     private String login;
 
     private String name;
