@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity<User> updateOrCreateUser(@Valid @RequestBody User user) throws ValidationException {
         if (isUserExist(user)) {
             log.info("Попытка авторизации уже существующего пользователя");
-            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
 //            throw new ValidationException("Такой пользователь уже существует", 400);
         }
         validateUser(user);

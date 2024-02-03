@@ -63,7 +63,7 @@ public class UserControllerTest {
         User user = new User(1, "best@ofthebest.best", "best",
                 LocalDate.of(2025,1,24), "Vladimir");
         ResponseEntity<User> response = userController.createUser(user);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
     }
@@ -91,7 +91,7 @@ public class UserControllerTest {
         userController.updateOrCreateUser(user);
 
         ResponseEntity<User> response = userController.updateOrCreateUser(user);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
     }
