@@ -1,37 +1,52 @@
 package ru.yandex.practicum.filmorate.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import ru.yandex.practicum.filmorate.validations.NotSpaceConstraint;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 /**
  * User.
  */
-
 @Data
-@AllArgsConstructor
 @Slf4j
 public class User {
 
     private Integer id;
 
-    @NotNull(message = "электронная почта не может быть пустой")
-    @Email(message = "почтовый адрес должен содержать символ @")
+    @NotNull(message = "электронная почта не может быть null")
+    @NotBlank(message = "электронная почта не может быть пустой")
+    @Email(regexp = ".+@.+\\..+", message = "неправильный формат e-mail")
     private String email;
 
     @NotNull(message = "логин не может быть null")
-    @NotBlank(message = "логин не может содержать пробелы")
+    @NotBlank(message = "логин не может быть пустым")
+//    @Pattern(regexp = "^[^\\s]+$", message = "логин не может содержать пробелы")
+    @NotSpaceConstraint(message = "логин не может содержать пробелы")
     private String login;
 
     private String name;
 
-    @PastOrPresent(message = "дата рождения не может быть в будущем")
+    @NotNull(message = "дата рождения не может быть null")
+    @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
 
+    public User(Integer id, String email, String login, LocalDate birthday, String name) {
+        this.id = id;
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+        this.name = getNameIfEmpty(name, login);
+    }
+
+    // имя для отображения может быть пустым — в таком случае будет использован логин
+    private String getNameIfEmpty(String name, String login) {
+        if (name == null || name.isBlank() || name.trim().isEmpty()) {
+            log.info("Поле имени использует адрес эл.почты");
+            return login;
+        }
+        return name;
+    }
 }

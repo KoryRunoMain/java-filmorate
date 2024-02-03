@@ -1,11 +1,15 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exeptions.ValidationException;
+
 import ru.yandex.practicum.filmorate.models.User;
 
 import javax.validation.Valid;
+
 import java.util.*;
 
 @RestController
@@ -13,47 +17,29 @@ import java.util.*;
 @Slf4j
 public class UserController {
 
-    private final Map<String, User> userStorage = new HashMap<>();
-    private int generatorId = 0;
+    private final Map<Integer, User> userStorage = new HashMap<>();
 
     @GetMapping
-    public Collection<User> getUsers() {
-        log.info("Список users получен");
-        return userStorage.values();
+    public ResponseEntity<List<User>> getUsers() {
+        log.info("Список всех польтзователей получен");
+        return new ResponseEntity<>(List.copyOf(userStorage.values()), HttpStatus.OK);
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User newUser) {
-        if (userStorage.containsKey(newUser.getEmail())) {
-            throw new ValidationException("Пользователь с электронной почтой " +
-                    newUser.getEmail() + " уже зарегистрирован.");
+    public ResponseEntity<User> createUser(@Valid @RequestBody User newUser) {
+        if (!userStorage.containsKey(newUser.getId())) {
+            newUser.setId(userStorage.size() + 1);
+            userStorage.put(newUser.getId(), newUser);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
-        newUser.setId(getNextId());
-        userStorage.put(getNameIfEmpty(newUser.getName(), newUser.getLogin()), newUser);
-        log.info("Пользователь добавлен");
-        return newUser;
+        return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
-    public User updateOrCreateUser(@Valid @RequestBody User user) {
-        userStorage.put(user.getEmail(), user);
+    public ResponseEntity<User> updateOrCreateUser(@Valid @RequestBody User user) {
+        userStorage.put(user.getId(), user);
         log.info("Пользователь добавлен или обновлен");
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-    private int getNextId() {
-        return ++generatorId;
-    }
-
-    // имя для отображения может быть пустым — в таком случае будет использован логин
-    private String getNameIfEmpty(String name, String login) {
-        if (name.isEmpty() || name.isBlank()) {
-            log.info("Поле имени использует адрес эл.почты");
-            return login;
-        }
-        return name;
-    }
-
-
 
 }

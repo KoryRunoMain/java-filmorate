@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validations.ReleaseDateConstraint;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -19,9 +20,12 @@ public class Film {
     private Integer id;
 
     @NotNull(message = "название не может быть null")
+    @NotBlank(message = "название не может быть пустым")
     private String name;
 
     @Size(max = 200, message = "максимальная длина описания — 200 символов")
+    @NotNull(message = "описание не может быть null")
+    @NotBlank(message = "описание не может быть пустым")
     private String description;
 
     @NotNull(message = "релиз не может быть null")

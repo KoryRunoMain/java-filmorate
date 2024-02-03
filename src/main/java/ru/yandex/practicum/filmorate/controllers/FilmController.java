@@ -1,14 +1,13 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -17,37 +16,26 @@ import java.util.Map;
 public class FilmController {
 
     private final Map<Integer, Film> filmStorage = new HashMap<>();
-    private int generatorId = 0;
 
     @GetMapping
-    public Collection<Film> getFilms() {
+    public ResponseEntity<List<Film>> getFilms() {
         log.info("Список всех фильмов получен");
-        return filmStorage.values();
+        return new ResponseEntity<>(List.copyOf(filmStorage.values()), HttpStatus.OK);
     }
 
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film newFilm) {
-        for (Film film : filmStorage.values()) {
-            if (film.getName().equals(newFilm.getName())
-                    && film.getReleaseDate().equals(newFilm.getReleaseDate())) {
-                throw new ValidationException("Фильм уже был добавлен");
-            }
-        }
-        newFilm.setId(getNextId());
+    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film newFilm) {
+        newFilm.setId(filmStorage.size() + 1);
         filmStorage.put(newFilm.getId(), newFilm);
         log.info("Фильм добавлен");
-        return newFilm;
+        return new ResponseEntity<>(newFilm, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public Film updateOrCreateFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> updateOrCreateFilm(@Valid @RequestBody Film film) {
         filmStorage.put(film.getId(), film);
         log.info("Фильм обновлен или добавлен");
-        return film;
-    }
-
-    private int getNextId() {
-        return ++generatorId;
+        return new ResponseEntity<>(film, HttpStatus.OK);
     }
 
 }
