@@ -36,6 +36,10 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<User> updateOrCreateUser(@Valid @RequestBody User user) {
+        if (isUserExist(user)) {
+            log.info("Попытка авторизации уже существующего пользователя");
+            throw new ValidationException("Такой пользователь уже существует");
+        }
         validateUser(user);
         userStorage.put(user.getId(), user);
         log.info("Пользователь добавлен или обновлен");
@@ -44,17 +48,26 @@ public class UserController {
 
     private void validateUser(User user) {
         if (user.getEmail() == null || !user.getEmail().contains("@")) {
-            log.info("ошбка проверки поля почты");
+            log.info("ошбка ввода почты");
             throw new ValidationException("Электронная почта не может быть пустой. пример: example@example.com");
         }
         if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.info("ошбка проверки поля логина");
+            log.info("ошбка ввода логина");
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("ошбка проверки поля даты рождения");
+            log.info("оошбка ввода даты рождения");
             throw new ValidationException("Дата рождения не может быть у будущем");
         }
+    }
+
+    private boolean isUserExist(User user) {
+        for (User userEmail : userStorage.values()) {
+            if (Objects.equals(userEmail.getEmail(), user.getEmail())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
