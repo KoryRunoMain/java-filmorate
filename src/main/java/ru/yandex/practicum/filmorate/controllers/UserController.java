@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.validations.ValidateUser;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
