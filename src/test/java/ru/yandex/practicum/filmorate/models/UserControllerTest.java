@@ -63,7 +63,7 @@ public class UserControllerTest {
         User user = new User(1, "best@ofthebest.best", "best",
                 LocalDate.of(2025,1,24), "Vladimir");
         ResponseEntity<User> response = userController.createUser(user);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(500, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
     }
