@@ -14,9 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTest {
 
-    User user = new User(1, "best@ofthebest.best", "best",
-            LocalDate.of(1994,1,24), "Vladimir");
-
     private UserController userController;
 
     @BeforeEach

@@ -27,42 +27,45 @@ public class FilmController {
 
     @PostMapping
     public ResponseEntity<Film> createFilm(@Valid @RequestBody Film newFilm) {
-        validateFilm(newFilm);
-        newFilm.setId(filmStorage.size() + 1);
-        filmStorage.put(newFilm.getId(), newFilm);
-        log.info("Фильм добавлен");
-        return new ResponseEntity<>(newFilm, HttpStatus.CREATED);
+        if (isValidateFilm(newFilm)) {
+            newFilm.setId(filmStorage.size() + 1);
+            filmStorage.put(newFilm.getId(), newFilm);
+            log.info("Фильм добавлен");
+            return new ResponseEntity<>(newFilm, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(newFilm, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
     public ResponseEntity<Film> updateOrCreateFilm(@Valid @RequestBody Film film) {
         if (isFilmExist(film)) {
-            log.info("Попытка плагиата");
-            throw new ValidationException("Фильм уже существует");
+            log.info("Попытка плагиата. Фильм уже добавлен");
+            return new ResponseEntity<>(film, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        validateFilm(film);
+        isValidateFilm(film);
         filmStorage.put(film.getId(), film);
         log.info("Фильм обновлен или добавлен");
         return new ResponseEntity<>(film, HttpStatus.OK);
     }
 
-    private void validateFilm(Film film) {
+    private boolean isValidateFilm(Film film) {
         if (film.getName() == null || film.getName().isEmpty()) {
-            log.info("ошбка ввода имени");
-            throw new ValidationException("Название не может быть пустым");
+            log.info("Ошбка ввода имени. Название не может быть пустым");
+            return false;
         }
         if (film.getDescription() != null && film.getDescription().length() > 200) {
-            log.info("ошбка ввода описания");
-            throw new ValidationException("Максимальная длина описания — 200 символов");
+            log.info("Ошбка ввода описания. Максимальная длина описания — 200 символов");
+            return false;
         }
         if (film.getReleaseDate() != null && film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.info("ошбка ввода даты релиза");
-            throw new ValidationException("Ошибка. Дата релиза — не раньше 28 декабря 1895 года;");
+            log.info("Ошбка ввода даты релиза. Дата релиза — не раньше 28 декабря 1895 года");
+            return false;
         }
         if (film.getDuration() <= 0) {
-            log.info("ошбка ввода продолдительности фильма");
-            throw new ValidationException("Продолжительность фильма должна быть положительной");
+            log.info("Ошбка ввода продолдительности фильмаю Продолжительность фильма должна быть положительной");
+            return false;
         }
+        return true;
     }
 
     private boolean isFilmExist(Film film) {
