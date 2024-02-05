@@ -7,7 +7,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 /**
- * User.
+ * User
  */
 @Data
 @Slf4j
@@ -45,4 +45,5 @@ public class User {
         }
         return name;
     }
+
 }
