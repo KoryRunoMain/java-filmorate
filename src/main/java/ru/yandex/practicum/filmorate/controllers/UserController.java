@@ -55,10 +55,6 @@ public class UserController {
             log.info("Электронная почта не может быть пустой. пример: example@example.com");
             return false;
         }
-//        if (user.getEmail() == null || !user.getEmail().contains("@")) {
-//            log.info("Электронная почта не может быть пустой. пример: example@example.com");
-//            return false;
-//        }
         if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
             log.info("Логин не может быть пустым и содержать пробелы");
             return false;
