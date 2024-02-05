@@ -102,6 +102,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName(value = "Текст POST запроса на добавление пользователя с неверным форматом почты. 'example@example.example'")
     public void test_8_createUserWithWrongEmailForm() {
         User user = new User(1, "bes t.rewr@tr", "best",
                 LocalDate.of(1994,1,24), "Vladimir");

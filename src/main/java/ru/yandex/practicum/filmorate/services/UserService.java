@@ -38,15 +38,15 @@ public class UserService {
                 "\\.[a-zA-Z0-9_+&*-]+)*" +
                 "@(?:[a-zA-Z0-9-]+" +
                 "\\.)+[a-zA-Z]{2,7}$")) {
-            log.info("Электронная почта не может быть пустой. пример: example@example.com");
+            log.info("Ошибка валидации e-mail. Электронная почта не может быть пустой. пример: example@example.com");
             throw new ValidationException("Электронная почта не может быть пустой. пример: example@example.com");
         }
         if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.info("Логин не может быть пустым и содержать пробелы");
+            log.info("Ошибка валидации логина. Логин не может быть пустым и содержать пробелы");
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("Дата рождения не может быть в будущем");
+            log.info("Ошибка валидации дня рождения. Дата рождения не может быть в будущем");
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
     }
@@ -54,8 +54,8 @@ public class UserService {
     private void userExist(User user) {
         for (User userEmail : userStorage.values()) {
             if (Objects.equals(userEmail.getEmail(), user.getEmail())) {
-                log.info("Попытка авторизации уже существующего пользователя");
-                throw new ValidationException("Попытка авторизации уже существующего пользователя");
+                log.info("Ошибка валидации user. Пользователь с таким email уже существует");
+                throw new ValidationException("Пользователь с таким email уже существует");
             }
         }
     }

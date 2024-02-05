@@ -35,20 +35,20 @@ public class FilmService {
 
     private void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isEmpty()) {
-            log.info("Ошбка ввода имени. Название не может быть пустым");
-            throw new ValidationException("Ошбка ввода имени. Название не может быть пустым");
+            log.info("Ошибка валидации имени. Название не может быть пустым");
+            throw new ValidationException("Название не может быть пустым");
         }
         if (film.getDescription() != null && film.getDescription().length() > 200) {
-            log.info("Ошбка ввода описания. Максимальная длина описания — 200 символов");
-            throw new ValidationException("Ошбка ввода описания. Максимальная длина описания — 200 символов");
+            log.info("Ошибка валидации описания. Максимальная длина описания — 200 символов");
+            throw new ValidationException("Максимальная длина описания — 200 символов");
         }
         if (film.getReleaseDate() != null && film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.info("Ошбка ввода даты релиза. Дата релиза — не раньше 28 декабря 1895 года");
-            throw new ValidationException("Ошбка ввода даты релиза. Дата релиза — не раньше 28 декабря 1895 года");
+            log.info("Ошибка валидации даты релиза. Дата релиза — не раньше 28 декабря 1895 года");
+            throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
         if (film.getDuration() <= 0) {
-            log.info("Ошбка ввода продолдительности фильмаю Продолжительность фильма должна быть положительной");
-            throw new ValidationException("Ошбка ввода продолдительности фильмаю Продолжительность фильма должна быть положительной");
+            log.info("Ошибка валидации продолдительности фильма. Продолжительность должна быть положительной");
+            throw new ValidationException("Продолжительность должна быть положительной");
         }
     }
 
@@ -58,8 +58,8 @@ public class FilmService {
                     && f.getDescription().equals(film.getDescription())
                     && f.getReleaseDate().equals(film.getReleaseDate())
                     && f.getDuration() == film.getDuration()) {
-                log.info("Попытка плагиата. Фильм уже добавлен");
-                throw new ValidationException("Попытка плагиата. Фильм уже добавлен");
+                log.info("Ошибка валидации film. Фильм уже добавлен");
+                throw new ValidationException("Фильм уже добавлен");
             }
         }
     }
