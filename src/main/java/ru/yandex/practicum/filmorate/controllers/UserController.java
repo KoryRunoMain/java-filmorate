@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -15,7 +14,7 @@ import java.util.*;
 @Slf4j
 public class UserController {
 
-    private final Map<Integer, User> userStorage = new HashMap<>();
+    private static final Map<Integer, User> userStorage = new HashMap<>();
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -25,8 +24,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User newUser) {
-        if (!userStorage.containsKey(newUser.getId())) {
-            validateUser(newUser);
+        if (!userStorage.containsKey(newUser.getId()) && isValidateUser(newUser)) {
             newUser.setId(userStorage.size() + 1);
             userStorage.put(newUser.getId(), newUser);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -40,25 +38,26 @@ public class UserController {
             log.info("Попытка авторизации уже существующего пользователя");
             return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
         }
-        validateUser(user);
+        isValidateUser(user);
         userStorage.put(user.getId(), user);
         log.info("Пользователь добавлен или обновлен");
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    private void validateUser(User user) {
+    private boolean isValidateUser(User user) {
         if (user.getEmail() == null || !user.getEmail().contains("@")) {
-            log.info("ошбка ввода почты");
-            throw new ValidationException("Электронная почта не может быть пустой. пример: example@example.com");
+            log.info("Электронная почта не может быть пустой. пример: example@example.com");
+            return false;
         }
         if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.info("ошбка ввода логина");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
+            log.info("Логин не может быть пустым и содержать пробелы");
+            return false;
         }
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("оошбка ввода даты рождения");
-            throw new ValidationException("Дата рождения не может быть у будущем");
+            log.info("Дата рождения не может быть в будущем");
+            return false;
         }
+        return true;
     }
 
     private boolean isUserExist(User user) {

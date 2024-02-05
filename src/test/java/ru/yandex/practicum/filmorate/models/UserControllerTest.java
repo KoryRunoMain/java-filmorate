@@ -57,24 +57,31 @@ public class UserControllerTest {
         assertEquals(user, response.getBody());
     }
 
-    // Дата рождения
     @Test
-    public void test_6_createUserWithWrongDate() {
+    @DisplayName(value = "Тест POST запроса с неверной датой рождения")
+    public void test_4_createUserWithWrongDate() {
         User user = new User(1, "best@ofthebest.best", "best",
                 LocalDate.of(2025,1,24), "Vladimir");
         ResponseEntity<User> response = userController.createUser(user);
-        assertEquals(500, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
     }
 
-
-    // Проверка если имя пустое вместо него email
-
+    @Test
+    @DisplayName("Тест POST запроса с пустым полем 'name', в поле должен быть записан login")
+    public void test_5_createUserWithEmptyName() {
+        User user = new User(1, "best@ofthebest.best", "best",
+                LocalDate.of(1994,1,24), " ");
+        ResponseEntity<User> response = userController.createUser(user);
+        assertEquals(user.getName(), user.getLogin());
+        assertNotNull(response.getBody());
+        assertEquals(user, response.getBody());
+    }
 
     @Test
     @DisplayName(value = "Тест PUT запроса на обновление или добавление пользователя")
-    public void test_4_updateOrCreateUser() {
+    public void test_6_updateOrCreateUser() {
         User user = new User(1, "best@ofthebest.best", "best",
                 LocalDate.of(1994,1,24), "Vladimir");
         ResponseEntity<User> response = userController.updateOrCreateUser(user);
@@ -85,7 +92,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName(value = "Тест PUT запроса на обновление или добавление существующего пользователя")
-    public void test_5_updateOrCreateUserExisting() {
+    public void test_7_updateOrCreateUserExisting() {
         User user = new User(1, "best@ofthebest.best", "best",
                 LocalDate.of(1994,1,24), "Vladimir");
         userController.updateOrCreateUser(user);
@@ -95,6 +102,5 @@ public class UserControllerTest {
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
     }
-
 
 }
