@@ -102,4 +102,13 @@ public class UserControllerTest {
         assertEquals(user, response.getBody());
     }
 
+    @Test
+    public void test_8_createUserWithWrongEmailForm() {
+        User user = new User(1, "bes t.rewr@tr", "best",
+                LocalDate.of(1994,1,24), "Vladimir");
+        ResponseEntity<User> response = userController.createUser(user);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(user, response.getBody());
+    }
+
 }

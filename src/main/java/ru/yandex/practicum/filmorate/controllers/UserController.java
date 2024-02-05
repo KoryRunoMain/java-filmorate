@@ -48,10 +48,17 @@ public class UserController {
     }
 
     private boolean isValidateUser(User user) {
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+        if (user.getEmail() == null || !user.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:" +
+                "\\.[a-zA-Z0-9_+&*-]+)*" +
+                "@(?:[a-zA-Z0-9-]+" +
+                "\\.)+[a-zA-Z]{2,7}$")) {
             log.info("Электронная почта не может быть пустой. пример: example@example.com");
             return false;
         }
+//        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+//            log.info("Электронная почта не может быть пустой. пример: example@example.com");
+//            return false;
+//        }
         if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
             log.info("Логин не может быть пустым и содержать пробелы");
             return false;
