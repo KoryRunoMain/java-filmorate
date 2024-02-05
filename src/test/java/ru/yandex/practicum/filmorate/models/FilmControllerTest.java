@@ -3,15 +3,11 @@ package ru.yandex.practicum.filmorate.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import ru.yandex.practicum.filmorate.controllers.FilmController;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmControllerTest {
@@ -46,8 +42,8 @@ public class FilmControllerTest {
     @Test
     @DisplayName(value = "Тест POST запроса на добавление фильма с неверно заполненными полями")
     public void test_3_createFilmInValid() {
-        Film film = new Film(1, "", "",
-                LocalDate.of(2024, 1, 1), -100);
+        Film film = new Film(1, "", "D1",
+                LocalDate.of(2024, 1, 1), 100);
         ResponseEntity<Film> response = filmController.createFilm(film);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(film, response.getBody());

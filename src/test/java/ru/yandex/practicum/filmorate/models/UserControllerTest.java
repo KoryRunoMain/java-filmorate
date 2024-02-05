@@ -3,15 +3,11 @@ package ru.yandex.practicum.filmorate.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import ru.yandex.practicum.filmorate.controllers.UserController;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTest {
@@ -50,7 +46,10 @@ public class UserControllerTest {
                 LocalDate.of(1994,1,24), "Vladimir");
         userController.createUser(user);
 
-        ResponseEntity<User> response = userController.createUser(user);
+        User user2 = new User(1, "best@ofthebest.best", "best",
+                LocalDate.of(1994,1,24), "Vladimir");
+
+        ResponseEntity<User> response = userController.createUser(user2);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(user, response.getBody());
