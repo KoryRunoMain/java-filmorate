@@ -3,10 +3,10 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.services.FilmService;
-import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film newFilm) {
+    public ResponseEntity<Film> createFilm(@Validated @RequestBody Film newFilm) {
         try {
             filmService.createFilm(newFilm);
             log.info("Фильм добавлен");
@@ -40,7 +40,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateOrCreateFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> updateOrCreateFilm(@Validated @RequestBody Film film) {
         try {
             filmService.updateFilm(film);
             log.info("Фильм обновлен или добавлен");
