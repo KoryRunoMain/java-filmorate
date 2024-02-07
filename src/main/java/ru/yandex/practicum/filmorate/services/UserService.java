@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.services;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.models.User;
 import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,41 +12,40 @@ import java.util.Objects;
 public class UserService {
 
     private final Map<Integer, User> userStorage = new HashMap<>();
+    private static int COUNT = 0;
 
     public List<User> getUsers() {
         return List.copyOf(userStorage.values());
     }
 
-    public User createUser(User newUser) {
+    public void createUser(User newUser) {
         userExist(newUser);
         validateUser(newUser);
-        newUser.setId(userStorage.size() + 1);
+        newUser.setId(++COUNT);
         userStorage.put(newUser.getId(), newUser);
-        return newUser;
     }
 
-    public User updateOrCreateUser(User user) {
+    public void updateOrCreateUser(User user) {
         userExist(user);
         validateUser(user);
         userStorage.put(user.getId(), user);
-        return user;
     }
 
     private void validateUser(User user) {
-        if (user.getEmail() == null || !user.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:" +
+        if (user.getLogin().contains(" ")) {
+            log.info("Ошибка валидации логина. Логин не может содержать пробелы");
+            throw new ValidationException("Логин не может содержать пробелы");
+        }
+        if (!user.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:" +
                 "\\.[a-zA-Z0-9_+&*-]+)*" +
                 "@(?:[a-zA-Z0-9-]+" +
                 "\\.)+[a-zA-Z]{2,7}$")) {
-            log.info("Ошибка валидации e-mail. Электронная почта не может быть пустой. пример: example@example.com");
-            throw new ValidationException("Электронная почта не может быть пустой. пример: example@example.com");
+            log.info("Ошибка валидации e-mail");
+            throw new ValidationException("Ошибка валидации e-mail. Пример: example@example.com");
         }
-        if (user.getLogin() == null || user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.info("Ошибка валидации логина. Логин не может быть пустым и содержать пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-        }
-        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("Ошибка валидации дня рождения. Дата рождения не может быть в будущем");
-            throw new ValidationException("Дата рождения не может быть в будущем");
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            log.info("Поле имени использует адрес эл.почты");
+            user.setName(user.getLogin());
         }
     }
 
