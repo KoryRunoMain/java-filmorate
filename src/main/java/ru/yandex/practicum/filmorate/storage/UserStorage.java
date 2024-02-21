@@ -13,4 +13,6 @@ public interface UserStorage {
     User createUser(User object);
 
     User updateOrCreateUser(User user);
+
+    List<User> getFriends();
 }

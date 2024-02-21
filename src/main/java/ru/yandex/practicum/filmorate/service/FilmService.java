@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -10,12 +9,6 @@ import java.util.List;
 
 @Service
 public class FilmService implements IService<Film> {
-
-    /*
-    Создайте FilmService, который будет отвечать за операции с фильмами,
-    — добавление и удаление лайка, вывод 10 наиболее популярных фильмов по количеству лайков.
-    Пусть пока каждый пользователь может поставить лайк фильму только один раз.
-     */
 
     private final FilmStorage filmStorage;
 
@@ -39,6 +32,30 @@ public class FilmService implements IService<Film> {
         return filmStorage.updateFilm(film);
     }
 
-    // Добавить новые методы из ТЗ10
+    /*
+       НОВЫЕ
+       МЕТОДЫ
+       ТЗ-10
+    */
+    // FILM.Получить фильм по id
+    @Override
+    public Film getId(Integer id) {
+        return null;
+    }
+
+    // FILM.Поставить лайк
+    public Film addLike() {
+        return null;
+    }
+
+    // FILM.Удалить лайк
+    public Film deleteLike() {
+        return null;
+    }
+
+    // FILM.Вернуть список из первых count фильмов по количеству лайков (10)
+    public List<Film> getPopularFilms() {
+        return null;
+    }
 
 }

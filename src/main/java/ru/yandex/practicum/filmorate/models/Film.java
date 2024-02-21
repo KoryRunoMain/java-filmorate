@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Film
@@ -18,6 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Film implements IModel {
 
+    private final Set<Long> likes = new HashSet<>();
     private Integer id;
 
     @NotNull(message = "название не может быть null")

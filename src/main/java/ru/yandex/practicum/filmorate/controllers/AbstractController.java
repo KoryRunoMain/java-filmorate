@@ -19,7 +19,8 @@ public abstract class AbstractController <T extends IModel> implements IControll
 
     @Override
     public ResponseEntity<List<T>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.getAll());
     }
 
     @Override
@@ -32,9 +33,11 @@ public abstract class AbstractController <T extends IModel> implements IControll
     public ResponseEntity<T> update(T object) {
         T modifyObj = service.update(object);
         if (service.getAll().contains(object.getId())) {
-            return ResponseEntity.ok(modifyObj);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(modifyObj);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(modifyObj);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(modifyObj);
     }
 
 }

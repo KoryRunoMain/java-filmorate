@@ -5,17 +5,14 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.User;
 
 import javax.validation.ValidationException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Integer, User> userStorage = new HashMap<>();
-    private static int COUNT = 0;
+    private static int ID = 0;
 
     @Override
     public List<User> getUsers() {
@@ -27,7 +24,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User createUser(User newUser) {
         userExist(newUser);
         validateUser(newUser);
-        newUser.setId(++COUNT);
+        newUser.setId(++ID);
         userStorage.put(newUser.getId(), newUser);
         log.debug("Пользовтель добавлен");
         return newUser;
@@ -40,6 +37,11 @@ public class InMemoryUserStorage implements UserStorage {
         userStorage.put(user.getId(), user);
         log.debug("Пользовтель добавлен или обновлен");
         return user;
+    }
+
+    @Override
+    public List<User> getFriends() {
+        return null;
     }
 
     private void validateUser(User user) {

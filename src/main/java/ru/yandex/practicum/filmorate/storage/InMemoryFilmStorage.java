@@ -14,7 +14,7 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Map<Integer, Film> filmStorage = new HashMap<>();
-    private static int COUNT = 0;
+    private static int ID = 0;
 
     @Override
     public List<Film> getFilms() {
@@ -26,7 +26,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film createFilm(Film newfilm) {
         filmExist(newfilm);
         validateFilm(newfilm);
-        newfilm.setId(++COUNT);
+        newfilm.setId(++ID);
         filmStorage.put(newfilm.getId(), newfilm);
         log.debug("Фильм добавлен");
         return newfilm;
@@ -39,6 +39,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         filmStorage.put(film.getId(), film);
         log.debug("Фильм добавлен или обновлен");
         return film;
+    }
+
+    // FILM.Получить список популярных фильмов по лайкам
+    @Override
+    public List<Film> getPopularFilms(int count) {
+        return null;
     }
 
     private void validateFilm(Film film) {

@@ -12,4 +12,6 @@ public interface IService <T extends IModel> {
 
     T update(T object);
 
+    T getId(Integer id);
+
 }
