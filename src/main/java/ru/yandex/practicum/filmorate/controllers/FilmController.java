@@ -1,54 +1,42 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.services.FilmService;
-import javax.validation.ValidationException;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/films")
-@Slf4j
-public class FilmController {
+public class FilmController extends AbstractController<Film> {
 
-    private final FilmService filmService;
-
-    public FilmController() {
-        filmService = new FilmService();
+    @Autowired
+    public FilmController(FilmService filmService) {
+        super(filmService);
     }
 
+    @Override
     @GetMapping
-    public ResponseEntity<List<Film>> getFilms() {
-        log.info("Список фильмов получен");
-        return new ResponseEntity<>(filmService.getFilms(), HttpStatus.OK);
+    public ResponseEntity<List<Film>> getAll() {
+        return super.getAll();
     }
 
+    @Override
     @PostMapping
-    public ResponseEntity<Film> createFilm(@Validated @RequestBody Film newFilm) {
-        try {
-            filmService.createFilm(newFilm);
-            log.info("Фильм добавлен");
-            return new ResponseEntity<>(newFilm, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(newFilm, HttpStatus.BAD_REQUEST);
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Film> create(@Validated @RequestBody Film newFilm) {
+        return super.create(newFilm);
     }
 
+    @Override
     @PutMapping
-    public ResponseEntity<Film> updateOrCreateFilm(@Validated @RequestBody Film film) {
-        try {
-            filmService.updateFilm(film);
-            log.info("Фильм обновлен или добавлен");
-            return new ResponseEntity<>(film, HttpStatus.OK);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(film, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Film> update(@Validated @RequestBody Film film) {
+        return super.update(film);
     }
+
+    // дописать эндпойнты по ТЗ-10
 
 }

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import java.util.Objects;
  */
 @Data
 @AllArgsConstructor
-public class Film {
+public class Film implements IModel {
 
     private Integer id;
 

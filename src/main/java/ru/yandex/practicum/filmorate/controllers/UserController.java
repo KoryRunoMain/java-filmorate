@@ -1,54 +1,45 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.services.UserService;
-import javax.validation.ValidationException;
+import ru.yandex.practicum.filmorate.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
-@Slf4j
-public class UserController {
+@RequestMapping(value = "/users")
+public class UserController extends AbstractController<User> {
 
-    private final UserService userService;
-
-    public UserController() {
-        userService = new UserService();
+    @Autowired
+    public UserController(UserService userService) {
+        super(userService);
     }
 
+
+    @Override
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        log.info("Список всех пользователей получен");
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    public ResponseEntity<List<User>> getAll() {
+        return super.getAll();
     }
 
+    @Override
     @PostMapping
-    public ResponseEntity<User> createUser(@Validated @RequestBody User newUser) {
-        try {
-            userService.createUser(newUser);
-            log.info("Пользователь добавлен");
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> create(@Validated @RequestBody User newUser) {
+        return super.create(newUser);
     }
 
+    @Override
     @PutMapping
-    public ResponseEntity<User> updateOrCreateUser(@Validated @RequestBody User user) {
-        try {
-            userService.updateOrCreateUser(user);
-            log.info("Пользователь добавлен или обновлен");
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> update(@Validated @RequestBody User user) {
+        return super.update(user);
     }
+
+    // дописать эндпойнты по ТЗ-10
 
 }
+
+

@@ -28,7 +28,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName(value = "Тест 1 запрос на проверку неверно заполненных полей")
+    @DisplayName(value = "Тест 2 запрос на проверку неверно заполненных полей")
     public void test_2_createUserInvalidData() {
         User user = new User(null, " ", null, "Vladimir",
                 LocalDate.of(9999,1,24));
