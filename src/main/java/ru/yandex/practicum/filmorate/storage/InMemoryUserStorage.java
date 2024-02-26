@@ -68,7 +68,7 @@ public class InMemoryUserStorage implements UserStorage {
     private void userExist(User user) {
         for (User userEmail : userStorage.values()) {
             if (Objects.equals(userEmail.getEmail(), user.getEmail())) {
-                throw new ValidationException("Ошибка валидации user. Пользователь с таким email уже существует");
+                throw new UserNotFoundException("Ошибка валидации user. Пользователь с таким email уже существует");
             }
         }
     }

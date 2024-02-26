@@ -10,8 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController implements IController<User> {
-
+public class UserController {
     private final UserService userService;
 
     @Autowired
@@ -19,56 +18,61 @@ public class UserController implements IController<User> {
         this.userService = userService;
     }
 
+
+    // USER.Получить id пользователя
+    @GetMapping(value = "/{id}")
+    public User getId(@Validated
+                      @PathVariable long id) {
+        return userService.getId(id);
+    }
+
+    // USER.Вернуть список пользователей, являющихся его друзьями
+    @GetMapping(value = "/{id}/friends")
+    public List<User> getFriends(@Validated
+                                 @PathVariable long id) {
+        return userService.getFriends(id);
+    }
+
+    // USER. Вернуть список друзей, общих с другим пользователем
+    @GetMapping(value = "/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@Validated
+                                       @PathVariable long id,
+                                       @PathVariable long otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
+
     // USER.Получить список пользователей
-    @Override
     @GetMapping
     public List<User> getAll() {
         return userService.getAll();
     }
 
-    // USER.Получить id пользователя
-    @Override
-    @GetMapping(value = "/{id}")
-    public User getId(@Validated @PathVariable Long id) {
-        return userService.getId(id);
+    // USER.Удалить из друзей
+    @DeleteMapping(value = "/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable long id,
+                             @PathVariable long friendId) {
+        return userService.removeFromFriends(id, friendId);
     }
 
     // USER.Создать пользователя
-    @Override
     @PostMapping
-    public User create(@Validated @RequestBody User user) {
+    public User create(@Validated
+                       @RequestBody User user) {
         return userService.create(user);
     }
 
     // USER.Создать или Обновить пользователя
-    @Override
     @PutMapping
-    public User update(@Validated @RequestBody User user) {
+    public User update(@Validated
+                       @RequestBody User user) {
         return userService.update(user);
     }
 
     // USER.Добавить в друзья
     @PutMapping(value = "/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+    public User addFriend(@PathVariable long id,
+                          @PathVariable long friendId) {
         return userService.addToFriends(id, friendId);
-    }
-
-    // USER.Удалить из друзей
-    @DeleteMapping(value = "/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        return userService.removeFromFriends(id, friendId);
-    }
-
-    // USER.Вернуть список пользователей, являющихся его друзьями
-    @GetMapping(value = "/{id}/friends")
-    public List<User> getFriends(@Validated @PathVariable Long userId) {
-        return userService.getFriends(userId);
-    }
-
-    // USER. Вернуть список друзей, общих с другим пользователем
-    @GetMapping(value = "/{id}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        return userService.getCommonFriends(id, otherId);
     }
 
 }

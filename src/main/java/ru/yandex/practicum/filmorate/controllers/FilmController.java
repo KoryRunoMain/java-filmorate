@@ -10,8 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/films")
-public class FilmController implements IController<Film> {
-
+public class FilmController {
     private final FilmService filmService;
 
     @Autowired
@@ -20,42 +19,42 @@ public class FilmController implements IController<Film> {
     }
 
     // FILM.Получить список фильмов
-    @Override
     @GetMapping
     public List<Film> getAll() {
         return filmService.getAll();
     }
 
     // FILM.Получить id фильма
-    @Override
     @GetMapping(value = "/{id}")
-    public Film getId(@PathVariable Long id) {
+    public Film getId(@PathVariable long id) {
         return filmService.getId(id);
     }
 
     // FILM.Создать фильм
-    @Override
     @PostMapping
-    public Film create(@Validated @RequestBody Film film) {
+    public Film create(@Validated
+                       @RequestBody Film film) {
         return filmService.create(film);
     }
 
     // FILM.Создать или Обновить фильм
-    @Override
     @PutMapping
-    public Film update(@Validated @RequestBody Film film) {
+    public Film update(@Validated
+                       @RequestBody Film film) {
         return filmService.update(film);
     }
 
     // FILM.Поставить лайк фильму
     @PutMapping(value = "/{id}/like/{userId}")
-    public Film addLike(@PathVariable Long id, @PathVariable Long userId) {
+    public Film addLike(@PathVariable long id,
+                        @PathVariable long userId) {
         return filmService.addLike(id, userId);
     }
 
-    // FILM.Удалить лайк фальма
+    // FILM.Удалить лайк
     @DeleteMapping(value = "/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+    public Film deleteLike(@PathVariable long id,
+                           @PathVariable long userId) {
         return filmService.removeLike(id, userId);
     }
 
@@ -63,7 +62,7 @@ public class FilmController implements IController<Film> {
        Если значение параметра count не задано, верните первые 10.
     */
     @GetMapping(value = "/popular")
-    public List<Film> getPopularFilms(@RequestParam(name = "count", defaultValue = "10") Integer count) {
+    public List<Film> getPopularFilms(@RequestParam(name = "count", defaultValue = "10") int count) {
         return filmService.getPopularFilms(count);
     }
 

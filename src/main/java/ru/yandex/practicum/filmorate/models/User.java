@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,8 +16,10 @@ import java.util.Set;
  */
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode
 public class User implements Model {
 
+    private final Set<Long> friends = new HashSet<>();
     private Long id;
 
     @NotNull(message = "электронная почта не может быть null")
@@ -32,8 +35,5 @@ public class User implements Model {
     @NotNull(message = "дата рождения не может быть null")
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
-
-    private final Set<Long> friends = new HashSet<>();
-
 
 }

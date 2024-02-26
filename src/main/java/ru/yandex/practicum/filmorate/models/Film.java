@@ -19,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Film implements Model {
 
+    private final Set<Long> likes = new HashSet<>();
     private Long id;
 
     @NotNull(message = "название не может быть null")
@@ -36,7 +37,6 @@ public class Film implements Model {
     @Positive(message = "продолжительность фильма должна быть положительной")
     private long duration;
 
-    private final Set<Long> likes = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
