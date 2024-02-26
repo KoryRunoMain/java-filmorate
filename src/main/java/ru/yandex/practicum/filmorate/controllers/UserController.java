@@ -26,6 +26,12 @@ public class UserController {
         return userService.getId(id);
     }
 
+    // USER.Получить список пользователей
+    @GetMapping
+    public List<User> getAll() {
+        return userService.getAll();
+    }
+
     // USER.Вернуть список пользователей, являющихся его друзьями
     @GetMapping(value = "/{id}/friends")
     public List<User> getFriends(@Validated
@@ -39,12 +45,6 @@ public class UserController {
                                        @PathVariable long id,
                                        @PathVariable long otherId) {
         return userService.getCommonFriends(id, otherId);
-    }
-
-    // USER.Получить список пользователей
-    @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
     }
 
     // USER.Удалить из друзей

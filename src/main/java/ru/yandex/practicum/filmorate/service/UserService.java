@@ -55,6 +55,7 @@ public class UserService implements IService<User> {
         friend.getFriends().remove(userId);
         return user;
     }
+
     // USER.Получить список друзей
     public List<User> getFriends(long userId) {
         User user = userStorage.getUserId(userId);
@@ -67,6 +68,7 @@ public class UserService implements IService<User> {
         }
         return friends;
     }
+
     // USER.Получить список общих друзей
     public List<User> getCommonFriends(long userId, long friendId) {
         List<User> mutualFriends = getFriends(userId);
