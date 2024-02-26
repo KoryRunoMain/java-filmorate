@@ -14,14 +14,13 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class FilmService implements IService<Film> {
-
     private final FilmStorage filmStorage;
-
 
     @Autowired
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
+
 
     @Override
     public List<Film> getAll() {
@@ -39,30 +38,25 @@ public class FilmService implements IService<Film> {
     }
 
     @Override
-    public Film getId(Long id) {
+    public Film getId(long id) {
         return filmStorage.getFilmId(id);
     }
 
-    /*
-       НОВЫЕ
-       МЕТОДЫ
-       ТЗ-10
-    */
     // FILM.Поставить лайк
-    public Film addLike(Long filmId, Long userId) {
+    public Film addLike(long filmId, long userId) {
         Film film = filmStorage.getFilmId(filmId);
         if (film == null) {
             throw new FilmNotFoundException(filmId + " не найден");
         }
-        if (!film.getLikes().contains(userId)) {
-            throw new UserNotFoundException(userId + " не найден");
+        if (film.getLikes().contains(userId)) {
+            throw new UserNotFoundException(userId + " лайк уже поставлен");
         }
         film.getLikes().add(userId);
         return film;
     }
 
     // FILM.Удалить лайк
-    public Film removeLike(Long filmId, Long userId) {
+    public Film removeLike(long filmId, long userId) {
         Film film = filmStorage.getFilmId(filmId);
         if (film == null) {
             throw new FilmNotFoundException(filmId + " не найден");

@@ -9,13 +9,13 @@ import java.util.*;
 
 @Service
 public class UserService implements IService<User> {
-
     private final UserStorage userStorage;
 
     @Autowired
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
+
 
     @Override
     public List<User> getAll() {
@@ -33,17 +33,12 @@ public class UserService implements IService<User> {
     }
 
     @Override
-    public User getId(Long id) {
+    public User getId(long id) {
         return userStorage.getUserId(id);
     }
 
-    /*
-       НОВЫЕ
-       МЕТОДЫ
-       ТЗ-10
-    */
     // USER.Добавить в друзья
-    public User addToFriends(Long userId, Long friendId) {
+    public User addToFriends(long userId, long friendId) {
         User user = userStorage.getUserId(userId);
         if (user == null) {
             throw new UserNotFoundException(userId + " не найден");
@@ -58,7 +53,7 @@ public class UserService implements IService<User> {
     }
 
     // USER.Удалить из друзей
-    public User removeFromFriends(Long userId, Long friendId) {
+    public User removeFromFriends(long userId, long friendId) {
         User user = userStorage.getUserId(userId);
         if (user == null) {
             throw new UserNotFoundException(userId + " не найден");
@@ -72,7 +67,7 @@ public class UserService implements IService<User> {
         return user;
     }
     // USER.Получить список друзей
-    public List<User> getFriends(Long userId) {
+    public List<User> getFriends(long userId) {
         User user = userStorage.getUserId(userId);
         if (user.getFriends() == null) {
             return new ArrayList<>();
@@ -84,7 +79,7 @@ public class UserService implements IService<User> {
         return friends;
     }
     // USER.Получить список общих друзей
-    public List<User> getCommonFriends(Long userId, Long friendId) {
+    public List<User> getCommonFriends(long userId, long friendId) {
         List<User> mutualFriends = getFriends(userId);
         mutualFriends.retainAll(getFriends(friendId));
         return new ArrayList<>(mutualFriends);

@@ -57,7 +57,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private void filmExist(Film film) {
         if (filmStorage.containsValue(film)) {
-            throw new ValidationException("Ошибка валидации film. Фильм уже добавлен");
+            throw new FilmNotFoundException("Ошибка валидации film. Фильм уже добавлен");
         }
     }
 

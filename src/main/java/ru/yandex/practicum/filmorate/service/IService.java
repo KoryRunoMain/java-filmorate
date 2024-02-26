@@ -12,6 +12,6 @@ public interface IService<T extends Model> {
 
     T update(T obj);
 
-    T getId(Long id);
+    T getId(long id);
 
 }
