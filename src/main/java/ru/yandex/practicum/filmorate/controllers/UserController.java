@@ -1,44 +1,75 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController extends AbstractController<User> {
+public class UserController implements IController<User> {
+
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
-        super(userService);
+        this.userService = userService;
     }
 
-
+    // USER.Получить список пользователей
     @Override
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return super.getAll();
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
+    // USER.Получить id пользователя
+    @Override
+    @GetMapping(value = "/{id}")
+    public User getId(@Validated @PathVariable Long id) {
+        return userService.getId(id);
+    }
+
+    // USER.Создать пользователя
     @Override
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> create(@Validated @RequestBody User newUser) {
-        return super.create(newUser);
+    public User create(@Validated @RequestBody User user) {
+        return userService.create(user);
     }
 
+    // USER.Создать или Обновить пользователя
     @Override
     @PutMapping
-    public ResponseEntity<User> update(@Validated @RequestBody User user) {
-        return super.update(user);
+    public User update(@Validated @RequestBody User user) {
+        return userService.update(user);
     }
 
-    // дописать эндпойнты по ТЗ-10
+    // USER.Добавить в друзья
+    @PutMapping(value = "/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.addToFriends(id, friendId);
+    }
+
+    // USER.Удалить из друзей
+    @DeleteMapping(value = "/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.removeFromFriends(id, friendId);
+    }
+
+    // USER.Вернуть список пользователей, являющихся его друзьями
+    @GetMapping(value = "/{id}/friends")
+    public List<User> getFriends(@Validated @PathVariable Long userId) {
+        return userService.getFriends(userId);
+    }
+
+    // USER. Вернуть список друзей, общих с другим пользователем
+    @GetMapping(value = "/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
 
 }
 

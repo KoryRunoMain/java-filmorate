@@ -1,17 +1,17 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.models.IModel;
+import ru.yandex.practicum.filmorate.models.Model;
 
 import java.util.List;
 
-public interface IService <T extends IModel> {
+public interface IService<T extends Model> {
 
     List<T> getAll();
 
-    T create(T object);
+    T create(T obj);
 
-    T update(T object);
+    T update(T obj);
 
-    T getId(Integer id);
+    T getId(Long id);
 
 }

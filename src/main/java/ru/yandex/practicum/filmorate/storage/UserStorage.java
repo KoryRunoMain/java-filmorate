@@ -10,9 +10,10 @@ public interface UserStorage {
 
     List<User> getUsers();
 
-    User createUser(User object);
+    User getUserId(Long id);
+
+    User createUser(User newUser);
 
     User updateOrCreateUser(User user);
 
-    List<User> getFriends();
 }

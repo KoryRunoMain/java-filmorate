@@ -1,16 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FilmService implements IService<Film> {
 
     private final FilmStorage filmStorage;
+
 
     @Autowired
     public FilmService(FilmStorage filmStorage) {
@@ -32,30 +38,48 @@ public class FilmService implements IService<Film> {
         return filmStorage.updateFilm(film);
     }
 
+    @Override
+    public Film getId(Long id) {
+        return filmStorage.getFilmId(id);
+    }
+
     /*
        НОВЫЕ
        МЕТОДЫ
        ТЗ-10
     */
-    // FILM.Получить фильм по id
-    @Override
-    public Film getId(Integer id) {
-        return null;
-    }
-
     // FILM.Поставить лайк
-    public Film addLike() {
-        return null;
+    public Film addLike(Long filmId, Long userId) {
+        Film film = filmStorage.getFilmId(filmId);
+        if (film == null) {
+            throw new FilmNotFoundException(filmId + " не найден");
+        }
+        if (!film.getLikes().contains(userId)) {
+            throw new UserNotFoundException(userId + " не найден");
+        }
+        film.getLikes().add(userId);
+        return film;
     }
 
     // FILM.Удалить лайк
-    public Film deleteLike() {
-        return null;
+    public Film removeLike(Long filmId, Long userId) {
+        Film film = filmStorage.getFilmId(filmId);
+        if (film == null) {
+            throw new FilmNotFoundException(filmId + " не найден");
+        }
+        if (!film.getLikes().contains(userId)) {
+            throw new UserNotFoundException(userId + " не найден");
+        }
+        film.getLikes().remove(userId);
+        return film;
     }
 
     // FILM.Вернуть список из первых count фильмов по количеству лайков (10)
-    public List<Film> getPopularFilms() {
-        return null;
+    public List<Film> getPopularFilms(int count) {
+        return filmStorage.getFilms().stream()
+                .sorted((f1, f2) -> f2.getLikes().size() - f1.getLikes().size())
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
 }

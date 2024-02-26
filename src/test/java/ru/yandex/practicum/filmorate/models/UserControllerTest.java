@@ -15,7 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserControllerTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private final TestRestTemplate restTemplate;
+
+    public UserControllerTest(TestRestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Test
     @DisplayName(value = "Тест 1 запрос на проверку верно заполненных полей")

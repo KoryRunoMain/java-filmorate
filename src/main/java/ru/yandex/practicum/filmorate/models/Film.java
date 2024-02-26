@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,10 +17,9 @@ import java.util.Set;
  */
 @Data
 @AllArgsConstructor
-public class Film implements IModel {
+public class Film implements Model {
 
-    private final Set<Long> likes = new HashSet<>();
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "название не может быть null")
     @NotBlank(message = "название не может быть пустым")
@@ -37,6 +35,8 @@ public class Film implements IModel {
     @NotNull(message = "продолжительность не может быть null")
     @Positive(message = "продолжительность фильма должна быть положительной")
     private long duration;
+
+    private final Set<Long> likes = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
