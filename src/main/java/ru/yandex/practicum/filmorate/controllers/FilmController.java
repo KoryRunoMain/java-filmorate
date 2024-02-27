@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "/films")
 public class FilmController {

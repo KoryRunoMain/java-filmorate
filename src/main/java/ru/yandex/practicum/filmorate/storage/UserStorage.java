@@ -5,7 +5,6 @@ import ru.yandex.practicum.filmorate.models.User;
 
 import java.util.List;
 
-
 @Component
 public interface UserStorage {
 

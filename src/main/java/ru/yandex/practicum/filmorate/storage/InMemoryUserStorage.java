@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import java.util.*;
 
-
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
