@@ -17,7 +17,7 @@ import java.util.Set;
 public class Film implements Model {
 
     private final Set<Long> likes = new HashSet<>();
-    private Long id;
+    private long id;
 
     @NotNull(message = "название не может быть null")
     @NotBlank(message = "название не может быть пустым")

@@ -17,7 +17,7 @@ import java.util.Set;
 public class User implements Model {
 
     private final Set<Long> friends = new HashSet<>();
-    private Long id;
+    private long id;
 
     @NotNull(message = "электронная почта не может быть null")
     @NotBlank(message = "электронная почта не может быть пустой")
