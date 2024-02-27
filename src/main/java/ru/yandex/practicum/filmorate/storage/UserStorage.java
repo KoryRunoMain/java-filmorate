@@ -10,7 +10,7 @@ public interface UserStorage {
 
     List<User> getUsers();
 
-    User getUserId(Long id);
+    User getUserId(long id);
 
     User createUser(User newUser);
 

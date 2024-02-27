@@ -15,7 +15,7 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> filmStorage = new HashMap<>();
-    private Long idCount = 0L;
+    private long idCount = 0L;
 
 
     @Override
@@ -24,7 +24,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmId(Long id) {
+    public Film getFilmId(long id) {
         if (!filmStorage.containsKey(id)) {
             throw new FilmNotFoundException(id + " не найден");
         }

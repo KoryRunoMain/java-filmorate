@@ -22,7 +22,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserId(Long id) {
+    public User getUserId(long id) {
         if (!userStorage.containsKey(id)) {
             throw new UserNotFoundException(id + " не найден");
         }

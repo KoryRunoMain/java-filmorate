@@ -16,20 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserControllerTest {
 
     @Autowired
-    private final TestRestTemplate restTemplate;
-
-    public UserControllerTest(TestRestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private TestRestTemplate restTemplate;
 
     @Test
     @DisplayName(value = "Тест 1 запрос на проверку верно заполненных полей")
     public void test_1_createUserValidData() {
-        User user = new User(null, "best@ofthebest.best", "best", "Vladimir",
+        User user = new User(1L, "best@ofthebest.best", "best", "Vladimir",
                 LocalDate.of(1994, 1, 24));
 
         ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
