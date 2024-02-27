@@ -13,7 +13,7 @@ import java.util.*;
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> userStorage = new HashMap<>();
-    private Long ID = 0L;
+    private Long idCount = 0L;
 
 
     @Override
@@ -33,7 +33,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User createUser(User newUser) {
         userExist(newUser);
         validateUser(newUser);
-        newUser.setId(++ID);
+        newUser.setId(++idCount);
         userStorage.put(newUser.getId(), newUser);
         return newUser;
     }

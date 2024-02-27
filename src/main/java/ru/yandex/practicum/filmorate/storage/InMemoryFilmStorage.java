@@ -15,7 +15,7 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> filmStorage = new HashMap<>();
-    private Long ID = 0L;
+    private Long idCount = 0L;
 
 
     @Override
@@ -35,7 +35,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film createFilm(Film film) {
         filmExist(film);
         validateFilm(film);
-        film.setId(++ID);
+        film.setId(++idCount);
         filmStorage.put(film.getId(), film);
         return film;
     }
