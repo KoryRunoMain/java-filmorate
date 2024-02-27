@@ -12,9 +12,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Film
- */
+
 @Data
 @AllArgsConstructor
 public class Film implements Model {

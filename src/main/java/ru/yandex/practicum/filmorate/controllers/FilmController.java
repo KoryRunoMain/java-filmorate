@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "/films")
 public class FilmController {
@@ -58,8 +59,9 @@ public class FilmController {
         return filmService.removeLike(id, userId);
     }
 
-    /* FILM.Вернуть список из первых count фильмов по количеству лайков.
-       Если значение параметра count не задано, верните первые 10.
+    /*
+    FILM.Вернуть список из первых count фильмов по количеству лайков.
+    Если значение параметра count не задано, верните первые 10.
     */
     @GetMapping(value = "/popular")
     public List<Film> getPopularFilms(@RequestParam(name = "count", defaultValue = "10") int count) {

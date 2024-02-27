@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+
 import java.util.*;
+
 
 @Slf4j
 @Component
@@ -17,7 +19,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public List<User> getUsers() {
-        log.debug("Список всех пользователей получен");
         return new ArrayList<>(userStorage.values());
     }
 
@@ -35,7 +36,6 @@ public class InMemoryUserStorage implements UserStorage {
         validateUser(newUser);
         newUser.setId(++ID);
         userStorage.put(newUser.getId(), newUser);
-        log.debug("Пользовтель добавлен");
         return newUser;
     }
 
@@ -44,7 +44,6 @@ public class InMemoryUserStorage implements UserStorage {
         userExist(user);
         validateUser(user);
         userStorage.put(user.getId(), user);
-        log.debug("Пользовтель добавлен или обновлен");
         return user;
     }
 
@@ -60,7 +59,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ValidationException("Ошибка валидации e-mail. Пример: example@example.com");
         }
         if (user.getName() == null || user.getName().trim().isEmpty()) {
-            log.debug("Поле имени использует адрес эл.почты");
+            log.info("Поле имени использует адрес эл.почты: " + user.getEmail());
             user.setName(user.getLogin());
         }
     }
