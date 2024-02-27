@@ -25,8 +25,8 @@ public class FilmService implements IService<Film> {
     }
 
     @Override
-    public Film create(Film newFilm) {
-        return filmStorage.createFilm(newFilm);
+    public Film create(Film film) {
+        return filmStorage.createFilm(film);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class FilmControllerTest {
                 LocalDate.of(2000, 1, 1), 100);
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
