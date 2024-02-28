@@ -21,7 +21,7 @@ public class FilmControllerTest {
     @Test
     @DisplayName(value = "Тест 1 запрос на проверку верно заполненных полей")
     public void test_1_createFilmValidData() {
-        Film film = new Film(1, "N1", "D1",
+        Film film = new Film(1L, "N1", "D1",
                 LocalDate.of(2000, 1, 1), 100);
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
@@ -37,6 +37,5 @@ public class FilmControllerTest {
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
-
 
 }

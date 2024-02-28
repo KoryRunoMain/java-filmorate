@@ -1,54 +1,72 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.services.FilmService;
-import javax.validation.ValidationException;
+import ru.yandex.practicum.filmorate.service.FilmService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/films")
-@Slf4j
 public class FilmController {
-
     private final FilmService filmService;
 
-    public FilmController() {
-        filmService = new FilmService();
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
+    // FILM.Получить список фильмов
     @GetMapping
-    public ResponseEntity<List<Film>> getFilms() {
-        log.info("Список фильмов получен");
-        return new ResponseEntity<>(filmService.getFilms(), HttpStatus.OK);
+    public List<Film> getAll() {
+        return filmService.getAll();
     }
 
+    // FILM.Получить id фильма
+    @GetMapping(value = "/{id}")
+    public Film getId(@PathVariable long id) {
+        return filmService.getId(id);
+    }
+
+    /*
+    FILM.Вернуть список из первых count фильмов по количеству лайков.
+    Если значение параметра count не задано, верните первые 10.
+    */
+    @GetMapping(value = "/popular")
+    public List<Film> getPopularFilms(@RequestParam(name = "count", defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
+    }
+
+    // FILM.Создать фильм
     @PostMapping
-    public ResponseEntity<Film> createFilm(@Validated @RequestBody Film newFilm) {
-        try {
-            filmService.createFilm(newFilm);
-            log.info("Фильм добавлен");
-            return new ResponseEntity<>(newFilm, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(newFilm, HttpStatus.BAD_REQUEST);
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Film create(@Validated
+                       @RequestBody Film film) {
+        return filmService.create(film);
     }
 
+    // FILM.Создать или Обновить фильм
     @PutMapping
-    public ResponseEntity<Film> updateOrCreateFilm(@Validated @RequestBody Film film) {
-        try {
-            filmService.updateFilm(film);
-            log.info("Фильм обновлен или добавлен");
-            return new ResponseEntity<>(film, HttpStatus.OK);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(film, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public Film update(@Validated
+                       @RequestBody Film film) {
+        return filmService.update(film);
+    }
+
+    // FILM.Поставить лайк фильму
+    @PutMapping(value = "/{id}/like/{userId}")
+    public Film addLike(@PathVariable long id,
+                        @PathVariable long userId) {
+        return filmService.likeFilm(id, userId);
+    }
+
+    // FILM.Удалить лайк
+    @DeleteMapping(value = "/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable long id,
+                           @PathVariable long userId) {
+        return filmService.removeLike(id, userId);
     }
 
 }

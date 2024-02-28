@@ -1,54 +1,81 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.services.UserService;
-import javax.validation.ValidationException;
+import ru.yandex.practicum.filmorate.service.UserService;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
-@Slf4j
+@RequestMapping(value = "/users")
 public class UserController {
-
     private final UserService userService;
 
-    public UserController() {
-        userService = new UserService();
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
+    // USER.Получить id пользователя
+    @GetMapping(value = "/{id}")
+    public User getId(@Validated
+                      @PathVariable long id) {
+        return userService.getId(id);
+    }
+
+    // USER.Получить список пользователей
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        log.info("Список всех пользователей получен");
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
+    // USER.Вернуть список пользователей, являющихся его друзьями
+    @GetMapping(value = "/{id}/friends")
+    public List<User> getFriends(@Validated
+                                 @PathVariable long id) {
+        return userService.getFriends(id);
+    }
+
+    // USER. Вернуть список друзей, общих с другим пользователем
+    @GetMapping(value = "/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@Validated
+                                       @PathVariable long id,
+                                       @PathVariable long otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
+
+    // USER.Создать пользователя
     @PostMapping
-    public ResponseEntity<User> createUser(@Validated @RequestBody User newUser) {
-        try {
-            userService.createUser(newUser);
-            log.info("Пользователь добавлен");
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public User create(@Validated
+                       @RequestBody User user) {
+        return userService.create(user);
     }
 
+    // USER.Создать или Обновить пользователя
     @PutMapping
-    public ResponseEntity<User> updateOrCreateUser(@Validated @RequestBody User user) {
-        try {
-            userService.updateOrCreateUser(user);
-            log.info("Пользователь добавлен или обновлен");
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ValidationException e) {
-            log.info(e.getMessage());
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-        }
+    public User update(@Validated
+                       @RequestBody User user) {
+        return userService.update(user);
+    }
+
+    // USER.Добавить в друзья
+    @PutMapping(value = "/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable long id,
+                          @PathVariable long friendId) {
+        return userService.addToFriends(id, friendId);
+    }
+
+    // USER.Удалить из друзей
+    @DeleteMapping(value = "/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable long id,
+                             @PathVariable long friendId) {
+        return userService.removeFromFriends(id, friendId);
     }
 
 }
+
+

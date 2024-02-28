@@ -8,16 +8,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-/**
- * Film
- */
 @Data
 @AllArgsConstructor
-public class Film {
+public class Film implements Model {
 
-    private Integer id;
+    private final Set<Long> likes = new HashSet<>();
+    private Long id;
 
     @NotNull(message = "название не может быть null")
     @NotBlank(message = "название не может быть пустым")
@@ -33,6 +33,15 @@ public class Film {
     @NotNull(message = "продолжительность не может быть null")
     @Positive(message = "продолжительность фильма должна быть положительной")
     private long duration;
+
+
+    public void addLike(long userId) {
+        this.likes.add(userId);
+    }
+
+    public void deleteLike(long userId) {
+        this.likes.remove(userId);
+    }
 
     @Override
     public boolean equals(Object o) {
