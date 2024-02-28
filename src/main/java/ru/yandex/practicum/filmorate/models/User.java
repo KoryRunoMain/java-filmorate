@@ -33,4 +33,6 @@ public class User implements Model {
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
 
+
+
 }

@@ -2,7 +2,8 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -11,13 +12,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService implements IService<Film> {
+    private static final long USER_ID_MINIMAL = 1L;
+    private static final int TOP_FILM_LIST_MINIMAL = 1;
     private final FilmStorage filmStorage;
 
     @Autowired
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
-
 
     @Override
     public List<Film> getAll() {
@@ -40,24 +42,27 @@ public class FilmService implements IService<Film> {
     }
 
     // FILM.Поставить лайк
-    public Film addLike(long filmId, long userId) {
+    public Film likeFilm(long filmId, long userId) {
         Film film = filmStorage.getFilmId(filmId);
-        film.getLikes().add(userId);
+        film.addLike(userId);
         return film;
     }
 
     // FILM.Удалить лайк
     public Film removeLike(long filmId, long userId) {
         Film film = filmStorage.getFilmId(filmId);
-        if (userId < 0) {
-            throw new UserNotFoundException(userId + " отрицательное число");
+        if (userId < USER_ID_MINIMAL) {
+            throw new NotFoundException(userId + " не может быть меньше: " + USER_ID_MINIMAL);
         }
-        film.getLikes().remove(userId);
+        film.deleteLike(userId);
         return film;
     }
 
     // FILM.Вернуть список из первых count фильмов по количеству лайков (10)
     public List<Film> getPopularFilms(int count) {
+        if (count < TOP_FILM_LIST_MINIMAL) {
+            throw new ValidationException(count + " не может быть меньше: " + TOP_FILM_LIST_MINIMAL);
+        }
         return filmStorage.getFilms().stream()
                 .sorted((f1, f2) -> f2.getLikes().size() - f1.getLikes().size())
                 .limit(count)

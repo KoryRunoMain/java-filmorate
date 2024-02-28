@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.User;
 
@@ -15,7 +15,6 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> userStorage = new HashMap<>();
     private long idCount = 0L;
 
-
     @Override
     public List<User> getUsers() {
         return new ArrayList<>(userStorage.values());
@@ -24,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUserId(long id) {
         if (!userStorage.containsKey(id)) {
-            throw new UserNotFoundException(id + " не найден");
+            throw new NotFoundException(id + " не найден");
         }
         return userStorage.get(id);
     }
@@ -46,7 +45,6 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-
     private void validateUser(User user) {
         if (user.getLogin().contains(" ")) {
             throw new ValidationException("Ошибка валидации логина. Логин не может содержать пробелы");
@@ -66,7 +64,7 @@ public class InMemoryUserStorage implements UserStorage {
     private void userExist(User user) {
         if (userStorage.values().stream()
                 .anyMatch(u -> Objects.equals(u.getEmail(), user.getEmail()))) {
-            throw new UserNotFoundException("Ошибка валидации user. Пользователь с таким email уже существует");
+            throw new NotFoundException("Ошибка валидации user. Пользователь с таким email уже существует");
         }
     }
 

@@ -2,11 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IService<User> {
@@ -16,7 +17,6 @@ public class UserService implements IService<User> {
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
-
 
     @Override
     public List<User> getAll() {
@@ -60,20 +60,18 @@ public class UserService implements IService<User> {
     public List<User> getFriends(long userId) {
         User user = userStorage.getUserId(userId);
         if (user.getFriends() == null) {
-            return new ArrayList<>();
+            throw new NotFoundException(userId + " не найден");
         }
-        List<User> friends = new ArrayList<>();
-        for (Long uId : user.getFriends()) {
-            friends.add(userStorage.getUserId(uId));
-        }
-        return friends;
+        return user.getFriends().stream()
+                .map(userStorage::getUserId)
+                .collect(Collectors.toList());
     }
 
     // USER.Получить список общих друзей
     public List<User> getCommonFriends(long userId, long friendId) {
-        List<User> mutualFriends = getFriends(userId);
-        mutualFriends.retainAll(getFriends(friendId));
-        return new ArrayList<>(mutualFriends);
+        return getFriends(userId).stream()
+                .filter(getFriends(friendId)::contains)
+                .collect(Collectors.toList());
     }
 
 }

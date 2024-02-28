@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
@@ -17,7 +18,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
     // USER.Получить id пользователя
     @GetMapping(value = "/{id}")
@@ -47,15 +47,9 @@ public class UserController {
         return userService.getCommonFriends(id, otherId);
     }
 
-    // USER.Удалить из друзей
-    @DeleteMapping(value = "/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable long id,
-                             @PathVariable long friendId) {
-        return userService.removeFromFriends(id, friendId);
-    }
-
     // USER.Создать пользователя
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User create(@Validated
                        @RequestBody User user) {
         return userService.create(user);
@@ -73,6 +67,13 @@ public class UserController {
     public User addFriend(@PathVariable long id,
                           @PathVariable long friendId) {
         return userService.addToFriends(id, friendId);
+    }
+
+    // USER.Удалить из друзей
+    @DeleteMapping(value = "/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable long id,
+                             @PathVariable long friendId) {
+        return userService.removeFromFriends(id, friendId);
     }
 
 }

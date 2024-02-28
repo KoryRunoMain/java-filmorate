@@ -35,6 +35,14 @@ public class Film implements Model {
     private long duration;
 
 
+    public void addLike(long userId) {
+        this.likes.add(userId);
+    }
+
+    public void deleteLike(long userId) {
+        this.likes.remove(userId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
