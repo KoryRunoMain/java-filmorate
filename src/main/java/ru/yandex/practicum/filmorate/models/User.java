@@ -33,4 +33,12 @@ public class User implements Model {
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
 
+    public void addFriend(long userId) {
+        this.friends.add(userId);
+    }
+
+    public void deleteFriend(long userId) {
+        this.friends.remove(userId);
+    }
+
 }

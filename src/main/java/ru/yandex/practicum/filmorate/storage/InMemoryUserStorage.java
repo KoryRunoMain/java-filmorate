@@ -11,7 +11,6 @@ import java.util.*;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-
     private final Map<Long, User> userStorage = new HashMap<>();
     private long idCount = 0L;
 

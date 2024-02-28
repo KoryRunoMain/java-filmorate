@@ -42,8 +42,8 @@ public class UserService implements IService<User> {
     public User addToFriends(long userId, long friendId) {
         User user = userStorage.getUserId(userId);
         User friend = userStorage.getUserId(friendId);
-        user.getFriends().add(friendId);
-        friend.getFriends().add(userId);
+        user.addFriend(friendId);
+        friend.addFriend(userId);
         return user;
     }
 
@@ -51,8 +51,8 @@ public class UserService implements IService<User> {
     public User removeFromFriends(long userId, long friendId) {
         User user = userStorage.getUserId(userId);
         User friend = userStorage.getUserId(friendId);
-        user.getFriends().remove(friendId);
-        friend.getFriends().remove(userId);
+        user.deleteFriend(friendId);
+        friend.deleteFriend(userId);
         return user;
     }
 

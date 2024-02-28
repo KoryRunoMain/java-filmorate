@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-
     private final Map<Long, Film> filmStorage = new HashMap<>();
     private long idCount = 0L;
 

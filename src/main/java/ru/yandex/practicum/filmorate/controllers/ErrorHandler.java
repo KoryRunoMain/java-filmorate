@@ -17,13 +17,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse validationExceptionHandler(final ValidationException e) {
+    public ErrorResponse validationExceptionHandle(final ValidationException e) {
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationExceptions(final MethodArgumentNotValidException e) {
+    public ErrorResponse methodArgumentNotValidExceptionHandle(final MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult().getFieldErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .reduce("", (accumulator, error) -> accumulator + error + "; ");
@@ -32,13 +32,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse notFoundExceptionHandler(final NotFoundException e) {
+    public ErrorResponse notFoundExceptionHandle(final NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable e) {
+    public ErrorResponse throwableHandle(final Throwable e) {
         return new ErrorResponse(e.getMessage());
     }
 
