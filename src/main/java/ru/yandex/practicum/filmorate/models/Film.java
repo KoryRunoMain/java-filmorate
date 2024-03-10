@@ -16,23 +16,30 @@ import java.util.Set;
 @AllArgsConstructor
 public class Film implements Model {
 
-    private final Set<Long> likes = new HashSet<>();
-    private Long id;
+    private final Set<Long> likes = new HashSet<>(); // лайки пользователя
+    private final Set<Genre> genre = new HashSet<>(); // жанры фильмов
 
-    @NotNull(message = "название не может быть null")
+    @Positive
+    private Long id; // id фильма
+
+    @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "название не может быть пустым")
-    private String name;
+    private String name; // название фильма
 
-    @Size(max = 200, message = "максимальная длина описания — 200 символов")
-    @NotNull(message = "описание не может быть null")
-    private String description;
+    @NotNull(message = "поле не может быть пустым")
+    @Size(min = 1, max = 200, message = "минимальная длина описания - 1 символ, " +
+                                        "максимальная длина описания — 200 символов")
+    private String description; // описание фильма
 
-    @NotNull(message = "релиз не может быть null")
-    private LocalDate releaseDate;
+    @NotNull(message = "поле не может быть пустым")
+    private LocalDate releaseDate; // дата выхода фильма
 
-    @NotNull(message = "продолжительность не может быть null")
+    @NotNull(message = "поле не может быть пустым")
     @Positive(message = "продолжительность фильма должна быть положительной")
-    private long duration;
+    private long duration; // продолжительность фильма
+
+    @NotNull(message = "поле не может быть пустым")
+    private MPARating mpa; // значения оценок возрастного ограничения для фильма
 
 
     public void addLike(long userId) {

@@ -18,6 +18,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationExceptionHandle(final ValidationException e) {
+        log.error(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -27,18 +28,21 @@ public class ErrorHandler {
         String errorMessage = e.getBindingResult().getFieldErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .reduce("", (accumulator, error) -> accumulator + error + "; ");
+        log.error(e.getMessage());
         return new ErrorResponse(errorMessage);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse notFoundExceptionHandle(final NotFoundException e) {
+        log.error(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse throwableHandle(final Throwable e) {
+        log.error(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
