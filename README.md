@@ -36,7 +36,7 @@
 - здесь будет таблица
 
 ## БД файлы
-- src/main/resources/schema.sql
+- [schema.sql](src/main/resources/schema.sql)
 
 ## SQL-запросы
 - здесь будут запросы
