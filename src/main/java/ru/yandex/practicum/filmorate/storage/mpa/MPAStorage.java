@@ -1,4 +1,4 @@
 package ru.yandex.practicum.filmorate.storage.mpa;
 
-public class MPAStorage {
+public interface MPAStorage {
 }

@@ -1,4 +1,4 @@
 package ru.yandex.practicum.filmorate.storage.friend;
 
-public class FriendStorage {
+public interface FriendStorage {
 }
