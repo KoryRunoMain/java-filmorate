@@ -17,23 +17,58 @@
 - получение всех пользователей, по id, списка друзей, общих друзей
 
 ## ER-диаграмма
-![![img.png](img.png)]
+![img.png](ER-diagram.png)
 
 ## Описание ER-диаграммы
 ### films
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| id | integer | PK (PRIMARY KEY) |  | идентификатор фильма |
+| mpa_rating | integer | FK (FOREIGN KEY) | NOT NULL | идентификатор рэйтинга по возрасту (MPA) |
+| name | varchar(100) |  | NOT NULL | название |
+| description | varchar(255) |  | DEFAULT '' | описание |
+| realeseDate | date |  | NOT NULL | дата выхода |
+| duration | integer |  | NOT NULL | продолжительность |
+
 ### film_genre
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| film_id | integer | FK (FOREIGN KEY) |  | идентификатор фильма |
+| genre_id | integer | FK (FOREIGN KEY) |  | идентификатор жанра фильма |
+
 ### genres
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание            |
+| --- | --- | --- | -- |---------------------|
+| id | integer | PK (PRIMARY KEY) |  | идентификатор жанра |
+| name | varchar(100) |  | NOT NULL UNIQUE | название жанра кино |
+
 ### mpa_ratings
-- здесь будет таблица
-### likes
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| id | integer | PK (PRIMARY KEY) |  | идентификатор рейтинга |
+| name | varchar(100) |  | NOT NULL UNIQUE | название рэйтинга по возрасту (MPA) |
+
 ### users
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| id | integer | PK (PRIMARY KEY) |  | идентификатор пользователя |
+| email | varchar(255) |  | NOT NULL UNIQUE | электронная почта |
+| login | varchar(100) |  | NOT NULL UNIQUE | логин |
+| name | varchar(50) |  |  | имя |
+| birthday | date |  | NOT NULL | дата рождения |
+
 ### friends
-- здесь будет таблица
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| user_id | integer | FK (FOREIGN KEY) |  | идентификатор пользователя |
+| friend_id | integer | FK (FOREIGN KEY) |  | идентификатор пользователя |
+| status | boolean |  | DEFAULT false | статус (в друзьях или нет) |
+
+### likes
+| Поле | Тип(кол-во символов) | Ключ | Ограничения | Описание |
+| --- | --- | --- | -- | --- |
+| film_id | integer | FK (FOREIGN KEY) |  | идентификатор фильма |
+| user_id | integer | FK (FOREIGN KEY) |  | идентификатор пользователя |
 
 ## БД файлы
 - [schema.sql](src/main/resources/schema.sql)
