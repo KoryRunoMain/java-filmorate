@@ -4,7 +4,7 @@
 фильмами, пользователями, жанрами и рейтингом.**
 
 ## Стэк технологий
-- Java 11, Spring Boot, Maven, Lombok, Junit, JDBC, PostgreSQL
+- Java 11, Spring Boot, Maven, Lombok, Junit, JDBC, H2
 
 ## Функционал
 ### Фильмы:
