@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.models.MPARating;
 import ru.yandex.practicum.filmorate.storage.dao.MPADao;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class MPAService {
     private final MPADao mpaDao;
 
+    @Autowired
     public MPAService(MPADao mpaDao) {
         this.mpaDao = mpaDao;
     }
