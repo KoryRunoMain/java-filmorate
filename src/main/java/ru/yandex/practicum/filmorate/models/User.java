@@ -17,8 +17,6 @@ import java.util.Set;
 @EqualsAndHashCode
 public class User implements Model {
 
-    private final Set<Long> friends = new HashSet<>(); // id пользователей в друзьях
-
     @Positive
     private Long id; // id пользователя
 
@@ -35,6 +33,8 @@ public class User implements Model {
     @NotNull(message = "поле не может быть пустым")
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday; // дата рождения
+
+    private final Set<Long> friends = new HashSet<>(); // id пользователей в друзьях
 
     public void addFriend(long userId) {
         this.friends.add(userId);

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -13,11 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 public class Film implements Model {
-
-    private final Set<Long> likes = new HashSet<>(); // лайки пользователя
-    private final Set<Genre> genre = new HashSet<>(); // жанры фильмов
 
     @Positive
     private Long id; // id фильма
@@ -41,6 +36,9 @@ public class Film implements Model {
     @NotNull(message = "поле не может быть пустым")
     private MPARating mpa; // значения оценок возрастного ограничения для фильма
 
+    private final Set<Long> likes = new HashSet<>(); // лайки пользователя
+
+    private final Set<Genre> genre = new HashSet<>(); // жанры фильмов
 
     public void addLike(long userId) {
         this.likes.add(userId);
