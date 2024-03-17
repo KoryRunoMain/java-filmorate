@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import java.util.List;
 import java.util.Optional;
 
-public interface IStorageService <T> {
+public interface DbService<T> {
 
     T create(T object);
 

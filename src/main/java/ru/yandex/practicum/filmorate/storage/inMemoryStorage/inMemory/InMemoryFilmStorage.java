@@ -1,9 +1,10 @@
-package ru.yandex.practicum.filmorate.storage.inMemoryStorage;
+package ru.yandex.practicum.filmorate.storage.inMemoryStorage.inMemory;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.storage.inMemoryStorage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

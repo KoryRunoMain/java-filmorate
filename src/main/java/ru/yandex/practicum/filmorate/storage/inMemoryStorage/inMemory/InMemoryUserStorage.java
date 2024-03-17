@@ -1,10 +1,11 @@
-package ru.yandex.practicum.filmorate.storage.inMemoryStorage;
+package ru.yandex.practicum.filmorate.storage.inMemoryStorage.inMemory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.storage.inMemoryStorage.UserStorage;
 
 import java.util.*;
 

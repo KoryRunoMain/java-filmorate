@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.util.List;
 import java.util.Optional;
