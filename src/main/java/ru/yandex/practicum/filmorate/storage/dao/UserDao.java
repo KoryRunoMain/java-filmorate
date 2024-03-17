@@ -1,19 +1,21 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public interface UserDao {
+public interface UserDao extends IStorageService<User> {
 
     User createUser(User newUser);
 
-    User getUserById(Long id);
-
     User updateUser(User user);
 
-    User deleteUser(Long id);
+    Optional<User> findUserById(Long id);
+
+    Optional<User> deleteUser(Long id);
 
     List<User> getAllUsers() throws SQLException;
 
