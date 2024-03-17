@@ -24,7 +24,7 @@ public class UserControllerTest {
         User user = new User(1L, "best@ofthebest.best", "best", "Vladimir",
                 LocalDate.of(1994, 1, 24));
 
-        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/ru/yandex/practicum/filmorate/storage/dao/impl/users", user, User.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -34,7 +34,7 @@ public class UserControllerTest {
         User user = new User(null, " ", null, "Vladimir",
                 LocalDate.of(9999, 1, 24));
 
-        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/ru/yandex/practicum/filmorate/storage/dao/impl/users", user, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.dao.impl;
+package ru.yandex.practicum.filmorate.storage.dao.impl.friends;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

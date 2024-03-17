@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.services.FilmService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/films")
+@RequestMapping(value = "/ru/yandex/practicum/filmorate/storage/dao/impl/films")
 public class FilmController {
     private final FilmService filmService;
 

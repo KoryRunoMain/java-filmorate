@@ -1,10 +1,12 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.service.IService;
 import ru.yandex.practicum.filmorate.storage.inMemoryStorage.FilmStorage;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public class FilmService implements IService<Film> {
     private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(@Qualifier("FilmDao") FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
 

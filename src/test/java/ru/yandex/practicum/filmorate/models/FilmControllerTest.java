@@ -24,7 +24,7 @@ public class FilmControllerTest {
         Film film = new Film(1L, "N1", "D1",
                 LocalDate.of(2000, 1, 1), 100);
 
-        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/ru/yandex/practicum/filmorate/storage/dao/impl/films", film, Film.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -34,7 +34,7 @@ public class FilmControllerTest {
         Film film = new Film(null, null, "D1",
                 LocalDate.of(9999, 1, 1), 100);
 
-        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/ru/yandex/practicum/filmorate/storage/dao/impl/films", film, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 

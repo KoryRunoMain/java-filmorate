@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,9 @@ public class GenreService {
     public Genre getGenre(Long id) {
         return genreDao.getGenreById(id);
     }
+
+
+
 
     public List<Genre> getAllGenres() {
         return genreDao.getGenres().stream()
