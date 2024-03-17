@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
+import ru.yandex.practicum.filmorate.storage.dao.impl.users.UserMapper;
 
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,10 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public List<Genre> getGenres() {
-        return null;
+        return jdbcTemplate.query(
+                "SELECT id, " +
+                        "name",
+                new GenreMapper()
+        );
     }
 }

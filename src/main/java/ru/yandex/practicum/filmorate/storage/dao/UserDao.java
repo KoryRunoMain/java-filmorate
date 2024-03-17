@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
@@ -14,6 +15,6 @@ public interface UserDao {
 
     User deleteUser(Long id);
 
-    List<User> getAllUsers();
+    List<User> getAllUsers() throws SQLException;
 
 }

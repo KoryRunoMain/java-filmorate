@@ -8,10 +8,10 @@ import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 import java.util.List;
 
 @Component
-public class MpaDaoImpl implements MPADao {
+public class MpaRatingDaoImpl implements MPADao {
     private final JdbcTemplate jdbcTemplate;
 
-    public MpaDaoImpl(JdbcTemplate jdbcTemplate) {
+    public MpaRatingDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -23,6 +23,10 @@ public class MpaDaoImpl implements MPADao {
 
     @Override
     public List<MPARating> getAllMpaRatings() {
-        return null;
+        return jdbcTemplate.query(
+                "SELECT id, " +
+                        "name",
+                new MpaRatingMapper()
+        );
     }
 }

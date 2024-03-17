@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage.dao.impl.likes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.models.Like;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
 
 import java.util.List;
@@ -25,8 +26,13 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public List<Long> getLikes(Long filmId) {
-        return null;
+    public List<Like> getLikes(Long filmId) {
+        return jdbcTemplate.query(
+                "SELECT film_id, " +
+                        "user_id" +
+                "FROM likes",
+                new LikeMapper()
+        );
     }
 
     @Override

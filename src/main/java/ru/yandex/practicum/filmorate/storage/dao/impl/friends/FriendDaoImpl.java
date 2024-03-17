@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.dao.impl.friends;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.models.Friends;
 import ru.yandex.practicum.filmorate.storage.dao.FriendDao;
 
 import java.util.List;
@@ -25,7 +25,13 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    public List<User> getAllFriends(Long id) {
-        return null;
+    public List<Friends> getAllFriends(Long id) {
+        return jdbcTemplate.query(
+                "SELECT user_id, " +
+                        "friend_id, " +
+                        "status" +
+                    "FROM friends",
+                new FriendMapper()
+        );
     }
 }
