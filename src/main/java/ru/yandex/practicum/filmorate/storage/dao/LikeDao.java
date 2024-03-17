@@ -1,21 +1,18 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
-
-import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Like;
-import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface LikeDao extends IStorageService<User> {
+public interface LikeDao {
 
-    void addLike(Long filmId, Long useId);
+    void create(long filmId, long userId);
 
-    void deleteLike(Long filmId, Long userId);
+    Optional<Like> delete(long filmId, Long userId);
 
-    List<Like> getLikes(Long filmId);
+    List<Like> getLikes(long filmId);
 
-    List<Film> getPopularFilms(int count);
+    boolean isElementContains(long filmId, long userId);
 
 }

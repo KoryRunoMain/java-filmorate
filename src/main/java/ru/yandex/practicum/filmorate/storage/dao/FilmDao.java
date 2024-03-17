@@ -1,22 +1,17 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.service.IStorageService;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.util.Set;
 
-public interface FilmDao extends IStorageService<User> {
+public interface FilmDao extends IStorageService<Film> {
 
-    Film createFilm(Film newFilm);
+    void createGenre(long filmId, Set<Genre> genres);
 
-    Film updateFilm(Film film);
+    void updateGenre(long filmId, Set<Genre> genres);
 
-    Film deleteFilm(Long id);
-
-    Film getFilmById(Long id);
-
-    List<Film> getAllFilms() throws SQLException;
+    void getAllGenres(long id);
 
 }

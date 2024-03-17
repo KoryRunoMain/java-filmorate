@@ -1,15 +1,16 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.MPARating;
-import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface MPADao extends IStorageService<User> {
+public interface MPADao {
 
-    MPARating getMpaById(Long id);
+    Optional<MPARating> get(long id);
 
-    List<MPARating> getAllMpaRatings();
+    boolean isContains(long id);
+
+    List<MPARating> getAll();
 
 }

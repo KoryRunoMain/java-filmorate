@@ -1,17 +1,18 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.Friends;
-import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface FriendDao extends IStorageService<User> {
+public interface FriendDao {
 
-    void addFriend(Long userId, Long friendId);
+    void create(long userId, long friendId, boolean isCommon);
 
-    void deleteFriend(Long userId, Long friendId);
+    Optional<Friends> delete(long fromId, long toId);
 
-    List<Friends> getAllFriends(Long id);
+    List<Friends> getAllFriends(long id);
+
+    boolean isElementContains(long fromId, long toId);
 
 }

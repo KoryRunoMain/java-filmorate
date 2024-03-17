@@ -1,17 +1,20 @@
 package ru.yandex.practicum.filmorate.service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IStorageService <T> {
 
-    T create(T create);
+    T create(T object);
 
-    T getElementById(long id);
+    T update(T object);
 
-    T update();
+    Optional<T> get(long id);
 
-    boolean isContains(long id);
+    Optional<T> delete(long id);
 
     List<T> getAll();
+
+    boolean isElementContains(long id);
 
 }

@@ -1,23 +1,21 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
-import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.service.IStorageService;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
-public interface GenreDao extends IStorageService<User> {
+public interface GenreDao {
 
-    void addGenreToFilm(Film film);
+    Genre create(Genre genre);
 
-    void deleteGenreFromFilm(Film film);
+    Optional<Genre> get(long id);
 
-    Genre getGenreById(Long id);
+    Optional<Genre> delete(long id);
 
-    Set<Genre> getFilmGenres(Long id);
+    List<Genre> getAll();
 
-    List<Genre> getGenres();
+    boolean isElementContains(long id);
 
 }
