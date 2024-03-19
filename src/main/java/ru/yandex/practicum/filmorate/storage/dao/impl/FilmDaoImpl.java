@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.models.MPARating;
-import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDao;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
@@ -16,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Component
@@ -47,64 +45,46 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     @Override
-    public Optional<Film> get(long id) {
-        return Optional.empty();
+    public Film getById(long id) {
+        return null;
     }
 
     @Override
-    public Optional<Film> delete(long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isElementContains(long id) {
-        return false;
+    public Film deleteById(long id) {
+        return null;
     }
 
     @Override
     public List<Film> getAll() {
         return jdbcTemplate.query(
-                "SELECT id, " +
-                        "mpa_rating_id, " +
-                        "name, " +
-                        "description, " +
-                        "release_date, " +
-                        "duration" +
-                        "FROM films",
+                "SELECT id, mpa_rating_id, name, description, release_date, duration" +
+                    "FROM films",
                 this::mapRow
         );
     }
 
     @Override
-    public void createGenre(long filmId, Set<Genre> genres) {
-
+    public void addGenreToFilm(Film film) {
     }
 
     @Override
-    public void updateGenre(long filmId, Set<Genre> genres) {
-
+    public void updateFilmGenres(Film film) {
     }
 
     @Override
-    public void getAllGenres(long id) {
-
+    public List<Genre> getFilmGenres(long id) {
+        return null;
     }
 
     private Film mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Film film = new Film();
         MPARating mpaRating = new MPARating();
-        film.setId(
-                resultSet.getLong("id"));
-        mpaRating.setId(
-                resultSet.getInt("mpa_rating_id"));
-        film.setName(
-                resultSet.getString("name"));
-        film.setDescription(
-                resultSet.getString("description"));
-        film.setReleaseDate(
-                resultSet.getDate("release_date").toLocalDate());
-        film.setDuration(
-                resultSet.getInt("duration"));
+        film.setId(resultSet.getLong("id"));
+        mpaRating.setId(resultSet.getLong("mpa_rating_id"));
+        film.setName(resultSet.getString("name"));
+        film.setDescription(resultSet.getString("description"));
+        film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
+        film.setDuration(resultSet.getInt("duration"));
         return film;
     }
 

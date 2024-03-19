@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface IService<T extends Model> {
 
-    List<T> getAll();
-
     T create(T obj);
 
     T update(T obj);
 
-    T getId(long id);
+    T getById(long id);
+
+    List<T> getAll();
 
 }

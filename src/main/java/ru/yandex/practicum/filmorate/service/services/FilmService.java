@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.service.IFilmService;
 import ru.yandex.practicum.filmorate.service.IService;
 import ru.yandex.practicum.filmorate.storage.inMemoryStorage.FilmStorage;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FilmService implements IService<Film> {
+public class FilmService implements IFilmService {
     private static final long USER_ID_MINIMAL = 1L;
     private static final int TOP_FILM_LIST_MINIMAL = 1;
     private final FilmStorage filmStorage;
@@ -39,7 +40,7 @@ public class FilmService implements IService<Film> {
     }
 
     @Override
-    public Film getId(long id) {
+    public Film getById(long id) {
         return filmStorage.getFilmId(id);
     }
 

@@ -26,36 +26,36 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public Optional<Genre> get(long id) {
-        return Optional.empty();
+    public Genre update(Genre object) {
+        return null;
     }
 
     @Override
-    public Optional<Genre> delete(long id) {
-        return Optional.empty();
+    public Genre getById(long id) {
+        return null;
+    }
+
+    @Override
+    public Genre deleteById(long id) {
+        return null;
     }
 
 
     @Override
     public List<Genre> getAll() {
+        String sql = "SELECT * FROM genres";
         return jdbcTemplate.query(
-                "SELECT id, " +
-                        "name",
+                "SELECT id, name" +
+                    "FROM genres" +
+                    "ORDER BY id",
                 this::mapRow
         );
     }
 
-    @Override
-    public boolean isElementContains(long id) {
-        return false;
-    }
-
     private Genre mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Genre genre = new Genre();
-        genre.setId(
-                resultSet.getLong("id"));
-        genre.setName(
-                resultSet.getString("name"));
+        genre.setId(resultSet.getLong("id"));
+        genre.setName(resultSet.getString("name"));
         return genre;
     }
 

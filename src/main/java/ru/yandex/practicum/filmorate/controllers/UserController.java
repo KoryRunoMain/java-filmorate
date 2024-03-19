@@ -5,38 +5,38 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.services.UserService;
+import ru.yandex.practicum.filmorate.service.IUserService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/ru/yandex/practicum/filmorate/storage/dao/impl/users")
 public class UserController {
-    private final UserService userService;
+    private final IUserService service;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(IUserService service) {
+        this.service = service;
     }
 
     // USER.Получить id пользователя
     @GetMapping(value = "/{id}")
     public User getId(@Validated
                       @PathVariable long id) {
-        return userService.getId(id);
+        return service.getById(id);
     }
 
     // USER.Получить список пользователей
     @GetMapping
     public List<User> getAll() {
-        return userService.getAll();
+        return service.getAll();
     }
 
     // USER.Вернуть список пользователей, являющихся его друзьями
     @GetMapping(value = "/{id}/friends")
     public List<User> getFriends(@Validated
                                  @PathVariable long id) {
-        return userService.getFriends(id);
+        return service.getFriends(id);
     }
 
     // USER. Вернуть список друзей, общих с другим пользователем
@@ -44,7 +44,7 @@ public class UserController {
     public List<User> getCommonFriends(@Validated
                                        @PathVariable long id,
                                        @PathVariable long otherId) {
-        return userService.getCommonFriends(id, otherId);
+        return service.getCommonFriends(id, otherId);
     }
 
     // USER.Создать пользователя
@@ -52,28 +52,28 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Validated
                        @RequestBody User user) {
-        return userService.create(user);
+        return service.create(user);
     }
 
     // USER.Создать или Обновить пользователя
     @PutMapping
     public User update(@Validated
                        @RequestBody User user) {
-        return userService.update(user);
+        return service.update(user);
     }
 
     // USER.Добавить в друзья
     @PutMapping(value = "/{id}/friends/{friendId}")
     public User addFriend(@PathVariable long id,
                           @PathVariable long friendId) {
-        return userService.addToFriends(id, friendId);
+        return service.addToFriends(id, friendId);
     }
 
     // USER.Удалить из друзей
     @DeleteMapping(value = "/{id}/friends/{friendId}")
     public User deleteFriend(@PathVariable long id,
                              @PathVariable long friendId) {
-        return userService.removeFromFriends(id, friendId);
+        return service.removeFromFriends(id, friendId);
     }
 
 }

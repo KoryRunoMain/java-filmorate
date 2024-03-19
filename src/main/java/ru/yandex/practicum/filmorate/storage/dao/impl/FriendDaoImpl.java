@@ -22,12 +22,12 @@ public class FriendDaoImpl implements FriendDao {
 
 
     @Override
-    public void create(long userId, long friendId, boolean isCommon) {
+    public void createFriendship(long userId, long friendId, boolean isCommon) {
     }
 
     @Override
-    public Optional<Friends> delete(long fromId, long toId) {
-        return Optional.empty();
+    public Friends deleteFriendship(long fromId, long toId) {
+        return null;
     }
 
     @Override
@@ -41,19 +41,11 @@ public class FriendDaoImpl implements FriendDao {
         );
     }
 
-    @Override
-    public boolean isElementContains(long fromId, long toId) {
-        return false;
-    }
-
     private Friends mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Friends friends = new Friends();
-        friends.setUserId(
-                resultSet.getLong("user_id"));
-        friends.setFriendId(
-                resultSet.getLong("friend_id"));
-        friends.setIsCommon(
-                resultSet.getBoolean("status"));
+        friends.setUserId(resultSet.getLong("user_id"));
+        friends.setFriendId(resultSet.getLong("friend_id"));
+        friends.setIsCommon(resultSet.getBoolean("status"));
         return friends;
     }
 

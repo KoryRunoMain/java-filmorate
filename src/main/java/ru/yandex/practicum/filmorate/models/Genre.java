@@ -10,7 +10,7 @@ import javax.validation.constraints.Positive;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Genre {
+public class Genre implements Model {
 
     @Positive
     private Long id;

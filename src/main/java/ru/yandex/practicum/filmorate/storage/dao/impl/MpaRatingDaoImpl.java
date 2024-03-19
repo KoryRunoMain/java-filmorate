@@ -21,13 +21,8 @@ public class MpaRatingDaoImpl implements MPADao {
     }
 
     @Override
-    public boolean isContains(long id) {
-        return false;
-    }
-
-    @Override
-    public Optional<MPARating> get(long id) {
-        return Optional.empty();
+    public MPARating getById(long id) {
+        return null;
     }
 
     @Override
@@ -37,10 +32,8 @@ public class MpaRatingDaoImpl implements MPADao {
 
     private MPARating mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         MPARating mpaRating = new MPARating();
-        mpaRating.setId(
-                resultSet.getInt("is"));
-        mpaRating.setName(
-                resultSet.getString("name"));
+        mpaRating.setId(resultSet.getLong("id"));
+        mpaRating.setName(resultSet.getString("name"));
         return mpaRating;
     }
 

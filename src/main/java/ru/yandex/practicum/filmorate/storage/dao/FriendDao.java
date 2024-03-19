@@ -7,12 +7,10 @@ import java.util.Optional;
 
 public interface FriendDao {
 
-    void create(long userId, long friendId, boolean isCommon);
+    void createFriendship(long userId, long friendId, boolean isCommon);
 
-    Optional<Friends> delete(long fromId, long toId);
+    Friends deleteFriendship(long fromId, long toId);
 
     List<Friends> getAllFriends(long id);
-
-    boolean isElementContains(long fromId, long toId);
 
 }

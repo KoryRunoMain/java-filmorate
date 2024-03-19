@@ -33,8 +33,8 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public Optional<Like> delete(long filmId, Long userId) {
-        return Optional.empty();
+    public Like delete(long filmId, long userId) {
+        return null;
     }
 
     @Override
@@ -47,17 +47,10 @@ public class LikeDaoImpl implements LikeDao {
         );
     }
 
-    @Override
-    public boolean isElementContains(long filmId, long userId) {
-        return false;
-    }
-
     private Like mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Like userLike = new Like();
-        userLike.setFilmId(
-                resultSet.getLong("film_id"));
-        userLike.setUserId(
-                resultSet.getLong("user_id"));
+        userLike.setFilmId(resultSet.getLong("film_id"));
+        userLike.setUserId(resultSet.getLong("user_id"));
         return userLike;
     }
 

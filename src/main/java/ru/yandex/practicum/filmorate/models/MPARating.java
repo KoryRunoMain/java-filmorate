@@ -10,10 +10,10 @@ import javax.validation.constraints.Positive;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MPARating {
+public class MPARating implements Model {
 
     @Positive
-    private Integer id;
+    private Long id;
 
     @NotBlank
     private String name;

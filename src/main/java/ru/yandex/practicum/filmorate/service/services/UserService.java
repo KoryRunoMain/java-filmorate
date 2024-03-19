@@ -6,17 +6,18 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.service.IService;
+import ru.yandex.practicum.filmorate.service.IUserService;
 import ru.yandex.practicum.filmorate.storage.inMemoryStorage.UserStorage;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IService<User> {
+public class UserService implements IUserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("UserDao") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -36,7 +37,7 @@ public class UserService implements IService<User> {
     }
 
     @Override
-    public User getId(long id) {
+    public User getById(long id) {
         return userStorage.getUserId(id);
     }
 

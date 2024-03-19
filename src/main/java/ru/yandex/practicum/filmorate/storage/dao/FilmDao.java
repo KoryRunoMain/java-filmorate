@@ -2,16 +2,26 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.service.DbService;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
-public interface FilmDao extends DbService<Film> {
+public interface FilmDao {
 
-    void createGenre(long filmId, Set<Genre> genres);
+    Film create(Film film);
 
-    void updateGenre(long filmId, Set<Genre> genres);
+    Film update(Film film);
 
-    void getAllGenres(long id);
+    Film getById(long id);
+
+    Film deleteById(long id);
+
+    List<Film> getAll();
+
+    void addGenreToFilm(Film film);
+
+    void updateFilmGenres(Film film);
+
+    List<Genre> getFilmGenres(long id);
 
 }

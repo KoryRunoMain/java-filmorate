@@ -9,10 +9,8 @@ public interface LikeDao {
 
     void create(long filmId, long userId);
 
-    Optional<Like> delete(long filmId, Long userId);
+    Like delete(long filmId, long userId);
 
     List<Like> getLikes(long filmId);
-
-    boolean isElementContains(long filmId, long userId);
 
 }

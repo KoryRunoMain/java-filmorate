@@ -7,9 +7,7 @@ import java.util.Optional;
 
 public interface MPADao {
 
-    Optional<MPARating> get(long id);
-
-    boolean isContains(long id);
+    MPARating getById(long id);
 
     List<MPARating> getAll();
 

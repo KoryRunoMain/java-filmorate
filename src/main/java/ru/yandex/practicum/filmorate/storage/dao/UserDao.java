@@ -1,12 +1,20 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.DbService;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface UserDao extends DbService<User> {
+public interface UserDao {
 
-    Optional<User> delete(long id);
+    User create(User user);
+
+    User update(User user);
+
+    User getById(long id);
+
+    User deleteById(long id);
+
+    List<User> getAll();
 
 }

@@ -9,12 +9,12 @@ public interface GenreDao {
 
     Genre create(Genre genre);
 
-    Optional<Genre> get(long id);
+    Genre update(Genre genre);
 
-    Optional<Genre> delete(long id);
+    Genre getById(long id);
+
+    Genre deleteById(long id);
 
     List<Genre> getAll();
-
-    boolean isElementContains(long id);
 
 }
