@@ -2,22 +2,23 @@ package ru.yandex.practicum.filmorate.storage.dao.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
-import javax.validation.constraints.Negative;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
-@Component
+@Repository
+@Primary
 public class UserDaoImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -28,42 +29,39 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(User user) {
-        String sql = "INSERT INTO users (email, login, name, birthday) " +
+        String insertQuery = "INSERT INTO users (email, login, name, birthday) " +
                 "VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql,
+        jdbcTemplate.update(insertQuery,
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
-                user.getBirthday());
-        User newUser = jdbcTemplate.queryForObject(
-                "SELECT id, email, login, name, birthday" +
-                    "WHERE email = ?",
-//                new Object[]{user.getEmail()},
-                this::mapRow);
-        log.trace("В базу добален пользователь c {} идентификатором.", user.getId());
+                Date.valueOf(user.getBirthday()));
+        String selectQuery = "SELECT id, email, login, name, birthday " +
+                "FROM users " +
+                "WHERE email=?";
+        User newUser = jdbcTemplate.queryForObject(selectQuery, this::mapRow, user.getEmail());
+        log.trace("Пользователь c {} идентификатором добавлен в БД.", user.getId());
         return newUser;
     }
 
     @Override
     public User update(User user) {
-        String sql = "UPDATE users " +
-                "SET email = ?, login = ?, name = ?, birthday = ? " +
-                "WHERE id = ?";
-
-        jdbcTemplate.update(sql,
+        String insertQuery = "UPDATE users " +
+                "SET email=?, login=?, name=?, birthday=? " +
+                "WHERE id=?";
+        jdbcTemplate.update(insertQuery,
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
                 user.getBirthday(),
                 user.getId());
         log.info("Пользователь с идентификатором {} обновлен.", user.getId());
-        return user;
+        return getById(user.getId());
     }
 
     @Override
     public User getById(long id) {
-        SqlRowSet userRow = jdbcTemplate.queryForRowSet(
-                "SELECT * FROM users WHERE id = ?", id);
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE id=?", id);
         if (!userRow.next()) {
             log.info("Пользователь с идентификатором {} не найден.", id);
             throw new NotFoundException("Пользователь не найден.");
@@ -80,20 +78,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query(
-                "SELECT id, email, login, name, birthday, " +
-                    "FROM users",
-                this::mapRow);
+        String getAllQuery = "SELECT id, email, login, name, birthday, " +
+                "FROM users";
+        return jdbcTemplate.query(getAllQuery, this::mapRow);
     }
 
     @Override
     public User deleteById(long id) {
-        SqlRowSet userRow = jdbcTemplate.queryForRowSet(
-                "DELETE " +
-                        "FROM users " +
-                        "WHERE id = ?", id);
+        User user = getById(id);
+        String deleteQuery = "DELETE FROM users WHERE id=?";
+        jdbcTemplate.queryForRowSet(deleteQuery, id);
         log.info("Пользователь с идентификатором {} был удален.", id);
-        return (User) userRow;
+        return user;
     }
 
     private User mapRow(ResultSet resultSet, int rowNumber) throws SQLException {

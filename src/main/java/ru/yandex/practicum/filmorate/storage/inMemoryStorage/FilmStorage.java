@@ -5,7 +5,6 @@ import ru.yandex.practicum.filmorate.models.Film;
 
 import java.util.List;
 
-@Component
 public interface FilmStorage {
 
     List<Film> getFilms();

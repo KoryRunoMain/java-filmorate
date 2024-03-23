@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.service.IFilmService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/ru/yandex/practicum/filmorate/storage/dao/impl/films")
+@RequestMapping(value = "films")
 public class FilmController {
     private final IFilmService service;
 
@@ -43,30 +43,26 @@ public class FilmController {
     // FILM.Создать фильм
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Validated
-                       @RequestBody Film film) {
+    public Film create(@Validated @RequestBody Film film) {
         return service.create(film);
     }
 
     // FILM.Создать или Обновить фильм
     @PutMapping
-    public Film update(@Validated
-                       @RequestBody Film film) {
+    public Film update(@Validated @RequestBody Film film) {
         return service.update(film);
     }
 
     // FILM.Поставить лайк фильму
-    @PutMapping(value = "/{id}/like/{userId}")
-    public Film addLike(@PathVariable long id,
-                        @PathVariable long userId) {
-        return service.likeFilm(id, userId);
+    @PutMapping(value = "/{filmId}/like/{userId}")
+    public Film addLike(@PathVariable long filmId, @PathVariable long userId) {
+        return service.likeFilm(filmId, userId);
     }
 
     // FILM.Удалить лайк
-    @DeleteMapping(value = "/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable long id,
-                           @PathVariable long userId) {
-        return service.removeLike(id, userId);
+    @DeleteMapping(value = "/{filmId}/like/{userId}")
+    public Film deleteLike(@PathVariable long filmId, @PathVariable long userId) {
+        return service.removeLike(filmId, userId);
     }
 
 }

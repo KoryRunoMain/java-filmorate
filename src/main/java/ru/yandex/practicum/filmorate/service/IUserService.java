@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IUserService extends IService<User> {
 
-    User addToFriends(long userId, long friendId);
+    void addToFriends(long userId, long friendId);
 
-    User removeFromFriends(long userId, long friendId);
+    void removeFromFriends(long userId, long friendId);
 
-    List<User> getFriends(long userId);
+    List<User> getFriendsList(long userId);
 
     List<User> getCommonFriends(long userId, long friendId);
 

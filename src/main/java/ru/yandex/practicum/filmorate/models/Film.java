@@ -27,7 +27,7 @@ public class Film implements Model {
 
     @NotNull(message = "поле не может быть пустым")
     @Size(min = 1, max = 200, message = "минимальная длина описания - 1 символ, " +
-                                        "максимальная длина описания — 200 символов")
+            "максимальная длина описания — 200 символов")
     private String description; // описание фильма
 
     @NotNull(message = "поле не может быть пустым")
@@ -40,17 +40,7 @@ public class Film implements Model {
     @NotNull(message = "поле не может быть пустым")
     private MPARating mpa; // значения оценок возрастного ограничения для фильма
 
-    private final Set<Long> likes = new HashSet<>(); // лайки пользователя
-
-    private final Set<Genre> genre = new HashSet<>(); // жанры фильмов
-
-    public void addLike(long userId) {
-        this.likes.add(userId);
-    }
-
-    public void deleteLike(long userId) {
-        this.likes.remove(userId);
-    }
+    private Set<Genre> genres = new HashSet<>(); // жанры фильмов
 
     @Override
     public boolean equals(Object o) {
@@ -67,4 +57,7 @@ public class Film implements Model {
     public int hashCode() {
         return Objects.hash(name, description, releaseDate, duration);
     }
+
 }
+
+

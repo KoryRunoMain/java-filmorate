@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.models.Genre;
@@ -10,7 +11,7 @@ import ru.yandex.practicum.filmorate.service.IGenreService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ru/yandex/practicum/filmorate/storage/dao/impl/genres")
+@RequestMapping("/genres")
 public class GenreController {
     private final IGenreService service;
 
@@ -19,8 +20,8 @@ public class GenreController {
         this.service = service;
     }
 
-    @GetMapping
-    public Genre getGenre(long id) {
+    @GetMapping("/{id}")
+    public Genre getGenre(@PathVariable long id) {
         return service.getById(id);
     }
 

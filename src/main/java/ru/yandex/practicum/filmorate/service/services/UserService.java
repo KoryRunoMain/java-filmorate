@@ -1,80 +1,160 @@
 package ru.yandex.practicum.filmorate.service.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.IService;
 import ru.yandex.practicum.filmorate.service.IUserService;
-import ru.yandex.practicum.filmorate.storage.inMemoryStorage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.dao.FriendDao;
+import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService implements IUserService {
-    private final UserStorage userStorage;
+    private final UserDao userDao;
+    private final FriendDao friendDao;
 
     @Autowired
-    public UserService(@Qualifier("UserDao") UserStorage userStorage) {
-        this.userStorage = userStorage;
+    public UserService(UserDao userDao, FriendDao friendDao) {
+        this.userDao = userDao;
+        this.friendDao = friendDao;
     }
 
     @Override
     public List<User> getAll() {
-        return userStorage.getUsers();
+        return userDao.getAll();
     }
 
     @Override
     public User create(User newUser) {
-        return userStorage.createUser(newUser);
+        validateUser(newUser);
+        return userDao.create(newUser);
     }
 
     @Override
     public User update(User user) {
-        return userStorage.updateOrCreateUser(user);
+        validateUser(user);
+        return userDao.update(user);
     }
 
     @Override
     public User getById(long id) {
-        return userStorage.getUserId(id);
+        return userDao.getById(id);
     }
 
-    // USER.Добавить в друзья
-    public User addToFriends(long userId, long friendId) {
-        User user = userStorage.getUserId(userId);
-        User friend = userStorage.getUserId(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(userId);
-        return user;
+    @Override
+    public void addToFriends(long userId, long friendId) {
+        checkFriendToCreate(userId, friendId);
+        boolean isCommon = checkFriend(userId, friendId);
+        friendDao.createFriendship(userId, friendId, isCommon);
     }
 
-    // USER.Удалить из друзей
-    public User removeFromFriends(long userId, long friendId) {
-        User user = userStorage.getUserId(userId);
-        User friend = userStorage.getUserId(friendId);
-        user.deleteFriend(friendId);
-        friend.deleteFriend(userId);
-        return user;
+    @Override
+    public void removeFromFriends(long userId, long friendId) {
+        checkFriendToDelete(userId, friendId);
+        friendDao.deleteFriendship(userId, friendId);
     }
 
     // USER.Получить список друзей
-    public List<User> getFriends(long userId) {
-        User user = userStorage.getUserId(userId);
-        if (user.getFriends() == null) {
-            throw new NotFoundException(userId + " не найден");
+    @Override
+    public List<User> getFriendsList(long userId) {
+        if (!userExist(userId)) {
+            throw new NotFoundException("Пользователь отсутствует");
         }
-        return user.getFriends().stream()
-                .map(userStorage::getUserId)
+        List<User> friends = friendDao.getAllFriendsRequests(userId).stream()
+                .mapToLong(Long::valueOf)
+                .mapToObj(userDao::getById)
                 .collect(Collectors.toList());
+        return friends;
     }
 
     // USER.Получить список общих друзей
+    @Override
     public List<User> getCommonFriends(long userId, long friendId) {
-        return getFriends(userId).stream()
-                .filter(getFriends(friendId)::contains)
-                .collect(Collectors.toList());
+        List<Long> userIds = friendDao.getAllFriendsRequests(userId);
+        List<Long> friendIds = friendDao.getAllFriendsRequests(friendId);
+        List<User> commonFriends = new ArrayList<>();
+
+        for (Long id : userIds) {
+            if (friendIds.contains(id)) {
+                User user = userDao.getById(id);
+                if (user != null) {
+                    commonFriends.add(user);
+                }
+            }
+        }
+        return commonFriends;
+    }
+
+    private void validateUser(User user) {
+        if (user.getLogin().contains(" ")) {
+            throw new ValidationException("Ошибка валидации логина. Логин не может содержать пробелы");
+        }
+        if (!user.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:" +
+                "\\.[a-zA-Z0-9_+&*-]+)*" +
+                "@(?:[a-zA-Z0-9-]+" +
+                "\\.)+[a-zA-Z]{2,7}$")) {
+            throw new ValidationException("Ошибка валидации e-mail. Пример: example@example.com");
+        }
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            log.info("Поле имени использует адрес эл.почты: " + user.getEmail());
+            user.setName(user.getLogin());
+        }
+    }
+
+    private void checkFriendToCreate(long userId, long friendId) {
+        if (userId == friendId) {
+            throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
+        }
+        if (!userExist(userId)) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if (!userExist(friendId)) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if (checkFriend(userId, friendId)) {
+            throw new NotFoundException("Пользователи уже в друзьях");
+        }
+    }
+
+    private void checkFriendToDelete(long userId, long friendId) {
+        if (userId == friendId) {
+            throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
+        }
+        if (!userExist(userId)) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if (!userExist(friendId)) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if (!checkFriend(userId, friendId)) {
+            throw new NotFoundException("Пользователи не в друзьях");
+        }
+    }
+
+    private boolean checkFriend(long userId, long friendId) {
+        try {
+            friendDao.getFriendsConnection(userId, friendId);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+    private boolean userExist(long userId) {
+        try {
+            userDao.getById(userId);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
 }

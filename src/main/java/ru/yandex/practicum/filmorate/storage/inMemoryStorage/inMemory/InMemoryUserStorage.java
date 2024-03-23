@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.inMemoryStorage.UserStorage;
 import java.util.*;
 
 @Slf4j
-@Component
+@Component("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> userStorage = new HashMap<>();
     private long idCount = 0L;

@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.models.Genre;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FilmDao {
 
@@ -16,12 +14,8 @@ public interface FilmDao {
 
     Film deleteById(long id);
 
+    List<Film> getPopularFilms(int count);
+
     List<Film> getAll();
-
-    void addGenreToFilm(Film film);
-
-    void updateFilmGenres(Film film);
-
-    List<Genre> getFilmGenres(long id);
 
 }

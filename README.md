@@ -17,7 +17,7 @@
 - получение всех пользователей, по id, списка друзей, общих друзей
 
 ## ER-диаграмма
-![img.png](ER-diagram.png)
+![img.png](src/main/resources/ER-diagram.png)
 
 ## Описание ER-диаграммы
 ### films

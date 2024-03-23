@@ -2,26 +2,27 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.models.MPARating;
-import ru.yandex.practicum.filmorate.service.IMpaService;
+import ru.yandex.practicum.filmorate.service.IMPAService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/mpa_ratings")
+@RequestMapping("/mpa")
 public class MPARatingController {
-    private final IMpaService service;
+    private final IMPAService service;
 
     @Autowired
-    public MPARatingController(IMpaService service) {
+    public MPARatingController(IMPAService service) {
         this.service = service;
     }
 
-    @GetMapping
-    public MPARating getMpaRating(long id) {
-        return (MPARating) service.getById(id);
+    @GetMapping("/{id}")
+    public MPARating getMpaRating(@PathVariable long id) {
+        return service.getById(id);
     }
 
     @GetMapping

@@ -1,57 +1,43 @@
 package ru.yandex.practicum.filmorate.storage.dao.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.models.Like;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
-import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-
-@Component
+@Slf4j
+@Repository
+@Primary
 public class LikeDaoImpl implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
-    private final UserDao userDao;
-    private final LikeDao likeDao;
 
     @Autowired
-    public LikeDaoImpl(JdbcTemplate jdbcTemplate,
-                       UserDao userDao,
-                       LikeDao likeDao) {
+    public LikeDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userDao = userDao;
-        this.likeDao = likeDao;
     }
-
 
     @Override
     public void create(long filmId, long userId) {
+        String insertQuery = "INSERT INTO likes (film_id, user_id) VALUES(?, ?)";
+        jdbcTemplate.update(insertQuery, filmId, userId);
+        log.info("Добавлен лайк фильму id {} от ползьвателя id {}", filmId, userId);
     }
 
     @Override
-    public Like delete(long filmId, long userId) {
-        return null;
+    public void delete(long filmId, long userId) {
+        String deleteQuery = "DELETE FROM likes WHERE film_id=? AND user_id=?";
+        jdbcTemplate.update(deleteQuery, filmId, userId);
+        log.info("Удалён лайк фильма id {} от пользователя id {}", filmId, userId);
     }
 
     @Override
-    public List<Like> getLikes(long filmId) {
-        return jdbcTemplate.query(
-                "SELECT film_id, " +
-                        "user_id" +
-                        "FROM likes",
-                this::mapRow
-        );
-    }
-
-    private Like mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
-        Like userLike = new Like();
-        userLike.setFilmId(resultSet.getLong("film_id"));
-        userLike.setUserId(resultSet.getLong("user_id"));
-        return userLike;
+    public int getFilmLikes(long filmId) {
+        String selectQuery = "SELECT COUNT(*) FROM likes WHERE film_id=?";
+        int filmLikes = jdbcTemplate.queryForObject(selectQuery, new Object[]{filmId}, Integer.class);
+        log.info("Все лайки фильма id {} получены.", filmId);
+        return filmLikes;
     }
 
 }
