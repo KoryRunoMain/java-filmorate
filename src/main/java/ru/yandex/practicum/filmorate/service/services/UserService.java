@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.service.IUserService;
 import ru.yandex.practicum.filmorate.service.verifyService.IVerifyUser;
-import ru.yandex.practicum.filmorate.service.verifyService.verifies.VerifyUser;
 import ru.yandex.practicum.filmorate.storage.dao.FriendDao;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 

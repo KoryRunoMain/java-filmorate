@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.service.IFilmService;
 import ru.yandex.practicum.filmorate.service.verifyService.IVerifyFilm;
-import ru.yandex.practicum.filmorate.storage.dao.*;
+import ru.yandex.practicum.filmorate.storage.dao.FilmDao;
+import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
+import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
+import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 
 import java.util.List;
 

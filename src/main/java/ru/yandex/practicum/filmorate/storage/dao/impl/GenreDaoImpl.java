@@ -10,7 +10,9 @@ import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Repository

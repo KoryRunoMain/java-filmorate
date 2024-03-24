@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exceptions.OperationNotFoundException;
 import ru.yandex.practicum.filmorate.models.MPARating;
 import ru.yandex.practicum.filmorate.service.IMPAService;
 import ru.yandex.practicum.filmorate.service.verifyService.IVerifyMpa;
-import ru.yandex.practicum.filmorate.service.verifyService.verifies.VerifyMpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 
 import java.util.List;
