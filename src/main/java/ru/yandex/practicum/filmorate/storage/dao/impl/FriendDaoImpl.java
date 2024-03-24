@@ -25,14 +25,16 @@ public class FriendDaoImpl implements FriendDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // FRIENDS.Создать дружбу между пользователями в БД
     @Override
     public void createFriendship(long userId, long friendId, boolean isCommon) {
         String insertQuery = "INSERT INTO friends (friend_id, user_id, status) " +
                 "VALUES(?, ?, ?)";
         jdbcTemplate.update(insertQuery, friendId, userId, isCommon);
-        log.info("В друзьях оба пользователя ids {} , {}", userId, friendId);
+        log.info("Создана дружба между пользователями userId: {}, friendId: {}", userId, friendId);
     }
 
+    // FRIENDS.Удалить дружбу между пользователями из БД
     @Override
     public void deleteFriendship(long userId, long friendId) {
         String deleteQuery = "DELETE FROM friends " +
@@ -44,9 +46,10 @@ public class FriendDaoImpl implements FriendDao {
         if (friends.getIsCommon()) {
             jdbcTemplate.update(updateQuery, userId, friendId);
         }
-        log.info("Дружба между id {} , {} удалена.", userId, friendId);
+        log.info("Удалена дружба между пользователями userId: {}, friendId: {}", userId, friendId);
     }
 
+    // FRIENDS.Получить список зяявок в друзья из БД
     @Override
     public List<Long> getAllFriendsRequests(long id) {
         String friendRequests = "SELECT friend_id, user_id, status " +
@@ -57,10 +60,11 @@ public class FriendDaoImpl implements FriendDao {
         for (Friends friend : friendsList) {
             requestIds.add(friend.getFriendId());
         }
-        log.info("Получены запросы в друзья.");
+        log.info("Получен список заявок в друзья.");
         return requestIds;
     }
 
+    // FRIENDS.Получить статус дружбы между пользователями из БД
     @Override
     public Friends getFriendsConnection(long userId, long friendId) {
         String selectQuery = "SELECT friend_id, user_id, status " +
@@ -68,10 +72,11 @@ public class FriendDaoImpl implements FriendDao {
                 "WHERE user_id=? AND friend_id=?";
         Friends friends = jdbcTemplate.queryForObject(selectQuery,
                 new Object[]{userId, friendId}, this::mapRow);
-        log.info("Связь между пользователями id {} , {}", userId, friendId);
+        log.info("Получен статус дружбы пользователей userId: {}, friendId: {}", userId, friendId);
         return friends;
     }
 
+    // FRIENDS.Отображение данных полученных из БД на объект класса FRIENDS
     private Friends mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         long userId = resultSet.getLong("user_id");
         long friendId = resultSet.getLong("friend_id");

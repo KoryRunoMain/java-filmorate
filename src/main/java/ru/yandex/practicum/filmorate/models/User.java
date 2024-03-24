@@ -20,7 +20,7 @@ import java.util.Set;
 public class User implements Model {
 
     @Positive
-    private Long id; // id пользователя
+    private Long id; // идентификатор пользователя
 
     @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "электронная почта не может быть пустой")
@@ -36,7 +36,7 @@ public class User implements Model {
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday; // дата рождения
 
-    private final Set<Long> friends = new HashSet<>(); // id пользователей в друзьях
+    private final Set<Long> friends = new HashSet<>(); // идентификаторы пользователей в друзьях
 
     public void addFriend(long userId) {
         this.friends.add(userId);

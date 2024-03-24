@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface UserDao {
 
-    User create(User user);
+    User create(User user); // Создать пользователя
 
-    User update(User user);
+    User update(User user); // Обновить данные пользователя
 
-    User getById(long id);
+    User getById(long id); // Получить пользователя по идентификатору
 
-    User deleteById(long id);
+    User deleteById(long id); // Удалить пользователя по идентификатору
 
-    List<User> getAll();
+    List<User> getAll(); // Получить список пользователей
 
 }

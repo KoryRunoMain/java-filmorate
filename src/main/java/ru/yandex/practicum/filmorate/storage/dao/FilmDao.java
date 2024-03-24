@@ -6,16 +6,16 @@ import java.util.List;
 
 public interface FilmDao {
 
-    Film create(Film film);
+    Film create(Film film); // Создать фильм
 
-    Film update(Film film);
+    Film update(Film film); // Обновить фильм
 
-    Film getById(long id);
+    Film getById(long id); // Получить фильм по идентификатору
 
-    Film deleteById(long id);
+    Film deleteById(long id); // Удалить фильм по идентификатору
 
-    List<Film> getPopularFilms(int count);
+    List<Film> getPopularFilms(int count); // Получить список популярных фильмов по count (count default = 10)
 
-    List<Film> getAll();
+    List<Film> getAll(); // Получить список фильмов
 
 }

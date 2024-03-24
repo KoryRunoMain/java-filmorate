@@ -23,6 +23,7 @@ public class MPARatingDaoImpl implements MPADao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // MPARating.Получить рэйтинг по id из БД
     @Override
     public MPARating getById(int id) {
         String selectQuery = "SELECT * FROM mpa_ratings WHERE id=?";
@@ -31,6 +32,7 @@ public class MPARatingDaoImpl implements MPADao {
         return mpaRating;
     }
 
+    // MPARating.Получить список рейтингов из БД
     @Override
     public List<MPARating> getAll() {
         String selectQuery = "SELECT id, name FROM mpa_ratings ORDER BY id";
@@ -39,6 +41,7 @@ public class MPARatingDaoImpl implements MPADao {
         return mpaRatings;
     }
 
+    // MPARating.Отображение данных полученных из БД на объект класса MPARating
     private MPARating mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         MPARating mpaRating = new MPARating();
         mpaRating.setId(resultSet.getLong("id"));

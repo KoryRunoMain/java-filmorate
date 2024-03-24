@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface IFilmService extends IService<Film> {
 
-    Film likeFilm(long filmId, long userId);
+    void likeFilm(long filmId, long userId); // Поставить лайк фильму
 
-    Film removeLike(long filmId, long userId);
+    void removeLike(long filmId, long userId); // Удалить лайк у фильма
 
-    List<Film> getPopularFilms(int count);
+    List<Film> getPopularFilms(int count); // Получить список популярных фильмов по кол-ву лайков (по умолчанию count = 10 фильмов)
 
 }

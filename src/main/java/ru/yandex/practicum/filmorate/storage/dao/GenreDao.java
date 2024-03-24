@@ -7,16 +7,16 @@ import java.util.Set;
 
 public interface GenreDao {
 
-    Genre getById(int id);
+    Genre getById(int id); // Получить жанр по идентификатору
 
-    List<Genre> getAll();
+    List<Genre> getAll(); // Получить список жанров
 
-    void addGenreToFilm(long filmId, Set<Genre> genres);
+    void addGenreToFilm(long filmId, Set<Genre> genres); // Добавить жанр фильму
 
-    void updateFilmGenres(long filmId, Set<Genre> genres);
+    Set<Genre> getFilmGenres(long filmId); // Получить жанры фильма
 
-    Set<Genre> getFilmGenres(long filmId);
+    void updateFilmGenres(long filmId, Set<Genre> genres); // Обновить жанры фильма
 
-    void deleteById(long filmId);
+    void deleteById(long filmId); // Удалить жанры фильма
 
 }

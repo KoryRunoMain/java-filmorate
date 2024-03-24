@@ -23,6 +23,7 @@ public class GenreDaoImpl implements GenreDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // GENRE.Получить жанр по id из БД
     @Override
     public Genre getById(int id) {
         String selectQuery = "SELECT * FROM genres WHERE id=?";
@@ -31,7 +32,7 @@ public class GenreDaoImpl implements GenreDao {
         return genre;
     }
 
-    // GENRE.Удалить все жанры у фильма
+    // GENRE.Удалить жанр по id из БД
     @Override
     public void deleteById(long filmId) {
         String deleteQuery = "DELETE FROM film_genre WHERE film_id=?";
@@ -39,6 +40,7 @@ public class GenreDaoImpl implements GenreDao {
         log.info("Жанры фильма id {} удалены", filmId);
     }
 
+    // GENRE.Получить список жанров из БД
     @Override
     public List<Genre> getAll() {
         String sql = "SELECT id, name FROM genres ORDER BY id";
@@ -47,6 +49,7 @@ public class GenreDaoImpl implements GenreDao {
         return genres;
     }
 
+    // GENRE.Добавить жанр к фильму в БД
     @Override
     public void addGenreToFilm(long filmId, Set<Genre> genres) {
         String insertQuery = "INSERT INTO film_genre (film_id, genre_id)" +
@@ -56,12 +59,14 @@ public class GenreDaoImpl implements GenreDao {
         }
     }
 
+    // GENRE.Обновить жанры фильма в БД
     @Override
     public void updateFilmGenres(long filmId, Set<Genre> genres) {
         deleteById(filmId);
         addGenreToFilm(filmId, genres);
     }
 
+    // GENRE.Получить жанры фильма из БД
     @Override
     public Set<Genre> getFilmGenres(long filmId) {
         String selectQuery = "SELECT g.id, g.name " +
@@ -75,6 +80,7 @@ public class GenreDaoImpl implements GenreDao {
         return genres;
     }
 
+    // GENRE.Отображение данных полученных из БД на объект класса GENRE
     private Genre mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Genre genre = new Genre();
         genre.setId(resultSet.getLong("id"));

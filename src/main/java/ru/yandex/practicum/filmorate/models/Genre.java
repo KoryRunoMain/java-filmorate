@@ -13,9 +13,10 @@ import javax.validation.constraints.NotNull;
 public class Genre implements Model {
 
     @NotNull
-    private Long id;
+    private Long id; // идентификатор жанра
 
     @NotBlank
-    private String name;
+    private String name; // наименование жанра
+
 }
 

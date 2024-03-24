@@ -19,19 +19,14 @@ class UserDaoImplTest {
 
     @Test
     public void testFindUserById() {
-        // Подготавливаем данные для теста
-        User newUser = new User(1L, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1));
+        User newUser = new User(1L, "user@email.ru", "koryruno", "Vladimir", LocalDate.of(1994, 1, 24));
         UserDaoImpl userDaoImpl = new UserDaoImpl(jdbcTemplate);
         userDaoImpl.create(newUser);
-
-        // вызываем тестируемый метод
         User createdUser = userDaoImpl.getById(1);
-
-        // проверяем утверждения
         assertThat(createdUser)
-                .isNotNull() // проверяем, что объект не равен null
-                .usingRecursiveComparison() // проверяем, что значения полей нового
-                .isEqualTo(newUser);        // и сохраненного пользователя - совпадают
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(newUser);
     }
 
 }

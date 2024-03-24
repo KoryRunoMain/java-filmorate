@@ -31,13 +31,13 @@ public class UserController {
         return service.getAll();
     }
 
-    // USER.Вернуть список пользователей, являющихся его друзьями
+    // FRIENDS.Вернуть список пользователей, являющихся его друзьями
     @GetMapping(value = "/{id}/friends")
     public List<User> getFriends(@Validated @PathVariable long id) {
         return service.getFriendsList(id);
     }
 
-    // USER. Вернуть список друзей, общих с другим пользователем
+    // FRIENDS. Вернуть список друзей, общих с другим пользователем
     @GetMapping(value = "/{id}/friends/common/{otherId}")
     public List<User> getCommonFriends(@Validated @PathVariable long id, @PathVariable long otherId) {
         return service.getCommonFriends(id, otherId);
@@ -56,13 +56,13 @@ public class UserController {
         return service.update(user);
     }
 
-    // USER.Добавить в друзья
+    // FRIENDS.Добавить в друзья
     @PutMapping(value = "/{id}/friends/{friendId}")
     public void addFriend(@PathVariable long id, @PathVariable long friendId) {
         service.addToFriends(id, friendId);
     }
 
-    // USER.Удалить из друзей
+    // FRIENDS.Удалить из друзей
     @DeleteMapping(value = "/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable long id, @PathVariable long friendId) {
         service.removeFromFriends(id, friendId);

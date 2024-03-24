@@ -12,12 +12,12 @@ import javax.validation.constraints.NotNull;
 public class Friends {
 
     @NotNull
-    private Long userId;
+    private Long userId; // идентификатор пользователя
 
     @NotNull
-    private Long friendId;
+    private Long friendId; // идентификатор пользователя в друзьях
 
     @NotNull
-    private Boolean isCommon;
+    private Boolean isCommon; // статус дружбы (true - друзья, false - нет)
 
 }

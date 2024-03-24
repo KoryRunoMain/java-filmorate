@@ -19,7 +19,7 @@ import java.util.Set;
 public class Film implements Model {
 
     @Positive
-    private Long id; // id фильма
+    private Long id; // идентификатор фильма
 
     @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "название не может быть пустым")

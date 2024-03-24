@@ -13,8 +13,9 @@ import javax.validation.constraints.NotNull;
 public class MPARating implements Model {
 
     @NotNull
-    private Long id;
+    private Long id; // идентификатор возрастного рейтинга для фильма
 
     @NotBlank
-    private String name;
+    private String name; // наименование возрастного рейтинга
+
 }

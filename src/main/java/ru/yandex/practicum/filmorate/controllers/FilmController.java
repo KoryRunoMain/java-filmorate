@@ -47,22 +47,22 @@ public class FilmController {
         return service.create(film);
     }
 
-    // FILM.Создать или Обновить фильм
+    // FILM.Обновить фильм
     @PutMapping
     public Film update(@Validated @RequestBody Film film) {
         return service.update(film);
     }
 
-    // FILM.Поставить лайк фильму
+    // LIKE.Поставить лайк фильму
     @PutMapping(value = "/{filmId}/like/{userId}")
-    public Film addLike(@PathVariable long filmId, @PathVariable long userId) {
-        return service.likeFilm(filmId, userId);
+    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
+        service.likeFilm(filmId, userId);
     }
 
-    // FILM.Удалить лайк
+    // LIKE.Удалить лайк
     @DeleteMapping(value = "/{filmId}/like/{userId}")
-    public Film deleteLike(@PathVariable long filmId, @PathVariable long userId) {
-        return service.removeLike(filmId, userId);
+    public void deleteLike(@PathVariable long filmId, @PathVariable long userId) {
+        service.removeLike(filmId, userId);
     }
 
 }

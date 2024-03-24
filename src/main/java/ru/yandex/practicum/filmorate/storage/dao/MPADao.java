@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface MPADao {
 
-    MPARating getById(int id);
+    MPARating getById(int id); // Получить рэйтинг по идентификатору
 
-    List<MPARating> getAll();
+    List<MPARating> getAll(); // Получить список рэйтингов
 
 }

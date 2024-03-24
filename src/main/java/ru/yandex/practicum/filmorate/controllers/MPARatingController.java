@@ -20,11 +20,13 @@ public class MPARatingController {
         this.service = service;
     }
 
+    // MPARating.Получить рейтинг по id
     @GetMapping("/{id}")
     public MPARating getMpaRating(@PathVariable long id) {
         return service.getById(id);
     }
 
+    // MPARating.Получить список всех рейтингов
     @GetMapping
     public List<MPARating> getAllMpaRatings() {
         return service.getAll();

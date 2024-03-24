@@ -23,6 +23,7 @@ public class FilmDaoImpl implements FilmDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // FILM.Добавить фильм в БД
     @Override
     public Film create(Film film) {
         String sqlQuery = "INSERT INTO films (mpa_rating_id, name, description, releasedate, duration) " +
@@ -46,10 +47,11 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDescription(),
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration()}, this::mapRow);
-        log.info("Фильм c {} идентификатором добавлен в БД.", newFilm);
+        log.info("Фильм добавлен в БД id: {}", newFilm);
         return newFilm;
     }
 
+    // FILM.Обновить фильм в БД
     @Override
     public Film update(Film film) {
         String updateQuery = "UPDATE films " +
@@ -63,38 +65,42 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDuration(),
                 film.getId());
         Film updatedFilm = getById(film.getId());
-        log.info("Фильм c {} идентификатором обновлен.", updatedFilm);
+        log.info("Фильм обновлен в БД id: {}", updatedFilm);
         return updatedFilm;
     }
 
+    // FILM.Получить фильм по id из БД
     @Override
     public Film getById(long id) {
         String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
                 "FROM films " +
                 "WHERE id = ?";
         Film film = jdbcTemplate.queryForObject(selectQuery, new Object[]{id}, this::mapRow);
-        log.info("Найден фильм: {}", id);
+        log.info("Получен фильм с id: {}", id);
         return film;
     }
 
+    // FILM.Удалить фильм по id из БД
     @Override
     public Film deleteById(long id) {
         Film film = getById(id);
         String deleteQuery = "DELETE FROM films WHERE id=?";
         jdbcTemplate.queryForRowSet(deleteQuery, id);
-        log.info("Фильм с идентификатором {} был удален.", id);
+        log.info("Фильм удален id: {}", id);
         return film;
     }
 
+    // FILM.Получить список фильмов из БД
     @Override
     public List<Film> getAll() {
         String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
                 "FROM films";
         List<Film> films = jdbcTemplate.query(selectQuery, this::mapRow);
-        log.info("Найдены все фильмы: {}", films);
+        log.info("Получен список фильмов.");
         return films;
     }
 
+    // FILM.Получить список популярных фильмов из БД
     @Override
     public List<Film> getPopularFilms(int count) {
         String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
@@ -104,10 +110,11 @@ public class FilmDaoImpl implements FilmDao {
                 "ORDER BY COUNT(l.user_id) DESC " +
                 "LIMIT ?";
         List<Film> film = jdbcTemplate.query(selectQuery, new Object[]{count}, this::mapRow);
-        log.info("Популярные фильмы получены.");
+        log.info("Получен список популярных фильмов.");
         return film;
     }
 
+    // FILM.Отображение данных полученных из БД на объект класса FILM
     private Film mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         Film film = new Film();
         MPARating mpaRating = new MPARating();

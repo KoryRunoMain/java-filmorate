@@ -27,6 +27,7 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // USER.Создать пользователя в БД
     @Override
     public User create(User user) {
         String insertQuery = "INSERT INTO users (email, login, name, birthday) " +
@@ -44,6 +45,7 @@ public class UserDaoImpl implements UserDao {
         return newUser;
     }
 
+    // USER.Обновить данные пользователя в БД
     @Override
     public User update(User user) {
         String insertQuery = "UPDATE users " +
@@ -59,9 +61,11 @@ public class UserDaoImpl implements UserDao {
         return getById(user.getId());
     }
 
+    // USER.Получитль пользователя по id из БД
     @Override
     public User getById(long id) {
-        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE id=?", id);
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users " +
+                "WHERE id=?", id);
         if (!userRow.next()) {
             log.info("Пользователь с идентификатором {} не найден.", id);
             throw new NotFoundException("Пользователь не найден.");
@@ -76,6 +80,7 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
+    // USER.Получить список пользователей из БД
     @Override
     public List<User> getAll() {
         String getAllQuery = "SELECT id, email, login, name, birthday, " +
@@ -83,15 +88,18 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.query(getAllQuery, this::mapRow);
     }
 
+    // USER.Удалить пользователя по id в БД
     @Override
     public User deleteById(long id) {
         User user = getById(id);
-        String deleteQuery = "DELETE FROM users WHERE id=?";
+        String deleteQuery = "DELETE FROM users " +
+                "WHERE id=?";
         jdbcTemplate.queryForRowSet(deleteQuery, id);
         log.info("Пользователь с идентификатором {} был удален.", id);
         return user;
     }
 
+    // USER.Отображение данных полученных из БД на объект класса USER
     private User mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         User user = new User();
         user.setId(resultSet.getLong("id"));
