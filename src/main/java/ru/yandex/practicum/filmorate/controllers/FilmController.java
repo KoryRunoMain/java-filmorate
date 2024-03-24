@@ -67,7 +67,7 @@ public class FilmController {
 
     // FILM.Удалить фильм
     @DeleteMapping(value = "/{filmId}")
-    public void delete(@Validated @RequestBody long filmId) {
+    public void delete(@PathVariable long filmId) {
         service.deleteFilm(filmId);
     }
 
