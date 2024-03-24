@@ -14,4 +14,6 @@ public interface IUserService extends IService<User> {
 
     List<User> getCommonFriends(long userId, long friendId); // Получить список друзей, общих с другим пользователем
 
+    void deleteUser(long userId);
+
 }

@@ -47,6 +47,14 @@ public class UserService implements IUserService {
         return userDao.getById(id);
     }
 
+    // USER.Удалить пользователя по id
+    @Override
+    public void deleteUser(long userId) {
+        verifyUserBeforeDelete(userId);
+        userDao.deleteById(userId);
+        log.info("пользователь удален id: {}", userId);
+    }
+
     // USER.Получить всех пользователей
     @Override
     public List<User> getAll() {
@@ -64,7 +72,7 @@ public class UserService implements IUserService {
     // FRIENDS.Удалить из друзей
     @Override
     public void removeFromFriends(long userId, long friendId) {
-        verifyUserBeforeDelete(userId, friendId);
+        verifyUserBeforeDeleteFriendship(userId, friendId);
         friendDao.deleteFriendship(userId, friendId);
     }
 
@@ -131,7 +139,7 @@ public class UserService implements IUserService {
     }
 
     // USER.Проверить пользователей перед удалением из друзей
-    private void verifyUserBeforeDelete(long userId, long friendId) {
+    private void verifyUserBeforeDeleteFriendship(long userId, long friendId) {
         if (userId == friendId) {
             log.info("Попытка удаления самого себя userId: {}", userId);
             throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
@@ -147,6 +155,14 @@ public class UserService implements IUserService {
         if (!verifyFriend(userId, friendId)) {
             log.info("Попытка удаления из друзей userId: {} , friendId: {} ", userId, friendId);
             throw new NotFoundException("Пользователи не в друзьях");
+        }
+    }
+
+    // USER.Проверить пользователя перед удалением
+    private void verifyUserBeforeDelete(long userId) {
+        if (isUserExist(userId)) {
+            log.info("Пользователь не найден userId: {}", userId);
+            throw new NotFoundException("Пользователь не найден");
         }
     }
 

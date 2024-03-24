@@ -12,7 +12,7 @@ public interface FilmDao {
 
     Film getById(long id); // Получить фильм по идентификатору
 
-    Film deleteById(long id); // Удалить фильм по идентификатору
+    void deleteById(long id); // Удалить фильм по идентификатору
 
     List<Film> getPopularFilms(int count); // Получить список популярных фильмов по count (count default = 10)
 

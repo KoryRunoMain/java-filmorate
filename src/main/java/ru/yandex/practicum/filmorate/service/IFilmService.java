@@ -12,4 +12,5 @@ public interface IFilmService extends IService<Film> {
 
     List<Film> getPopularFilms(int count); // Получить список популярных фильмов по кол-ву лайков (по умолчанию count = 10 фильмов)
 
+    void deleteFilm(long filmId);
 }

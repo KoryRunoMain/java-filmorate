@@ -10,9 +10,9 @@ public interface UserDao {
 
     User update(User user); // Обновить данные пользователя
 
-    User getById(long id); // Получить пользователя по идентификатору
+    User getById(long userId); // Получить пользователя по идентификатору
 
-    User deleteById(long id); // Удалить пользователя по идентификатору
+    void deleteById(long userId); // Удалить пользователя по идентификатору
 
     List<User> getAll(); // Получить список пользователей
 

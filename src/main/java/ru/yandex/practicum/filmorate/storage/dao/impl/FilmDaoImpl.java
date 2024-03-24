@@ -82,12 +82,10 @@ public class FilmDaoImpl implements FilmDao {
 
     // FILM.Удалить фильм по id из БД
     @Override
-    public Film deleteById(long id) {
-        Film film = getById(id);
+    public void deleteById(long id) {
         String deleteQuery = "DELETE FROM films WHERE id=?";
         jdbcTemplate.queryForRowSet(deleteQuery, id);
         log.info("Фильм удален id: {}", id);
-        return film;
     }
 
     // FILM.Получить список фильмов из БД

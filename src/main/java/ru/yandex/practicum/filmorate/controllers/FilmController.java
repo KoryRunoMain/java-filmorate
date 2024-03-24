@@ -65,4 +65,10 @@ public class FilmController {
         service.removeLike(filmId, userId);
     }
 
+    // FILM.Удалить фильм
+    @DeleteMapping(value = "/{filmId}")
+    public void delete(@Validated @RequestBody long filmId) {
+        service.deleteFilm(filmId);
+    }
+
 }

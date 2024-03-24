@@ -69,6 +69,16 @@ public class FilmService implements IFilmService {
         return updatedFilm;
     }
 
+    // FILM.Удалить фильм
+    @Override
+    public void deleteFilm(long filmId) {
+        // Проверка
+        verifyBeforeDeleteFilm(filmDao.getById(filmId));
+        // Удаление
+        filmDao.deleteById(filmId);
+        log.info("Фильм удален id: {}", filmDao);
+    }
+
     // FILM.Получить фильм по id
     @Override
     public Film getById(long filmId) {
@@ -152,8 +162,16 @@ public class FilmService implements IFilmService {
         }
     }
 
-    // FILM.Проверить фильм перед удалением
+    // FILM.Проверить фильм перед обновлением
     private void verifyBeforeUpdateFilm(Film film) {
+        if (!filmDao.getAll().contains(film)) {
+            log.info("Фильм отсутствует id: {}", film.getId());
+            throw new NotFoundException("Фильм отсутствует.");
+        }
+    }
+
+    // FILM.Проверить фильм перед удалением
+    private void verifyBeforeDeleteFilm(Film film) {
         if (!filmDao.getAll().contains(film)) {
             log.info("Фильм отсутствует id: {}", film.getId());
             throw new NotFoundException("Фильм отсутствует.");

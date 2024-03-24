@@ -63,11 +63,11 @@ public class UserDaoImpl implements UserDao {
 
     // USER.Получитль пользователя по id из БД
     @Override
-    public User getById(long id) {
+    public User getById(long userId) {
         SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users " +
-                "WHERE id=?", id);
+                "WHERE id=?", userId);
         if (!userRow.next()) {
-            log.info("Пользователь с идентификатором {} не найден.", id);
+            log.info("Пользователь с идентификатором {} не найден.", userId);
             throw new NotFoundException("Пользователь не найден.");
         }
         User user = new User(
@@ -88,15 +88,13 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.query(getAllQuery, this::mapRow);
     }
 
-    // USER.Удалить пользователя по id в БД
+    // USER.Удалить пользователя по id из БД
     @Override
-    public User deleteById(long id) {
-        User user = getById(id);
+    public void deleteById(long userId) {
         String deleteQuery = "DELETE FROM users " +
                 "WHERE id=?";
-        jdbcTemplate.queryForRowSet(deleteQuery, id);
-        log.info("Пользователь с идентификатором {} был удален.", id);
-        return user;
+        jdbcTemplate.queryForRowSet(deleteQuery, userId);
+        log.info("Пользователь с идентификатором {} был удален.", userId);
     }
 
     // USER.Отображение данных полученных из БД на объект класса USER
