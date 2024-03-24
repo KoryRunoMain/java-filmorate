@@ -2,12 +2,11 @@ package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.service.IUserService;
+import ru.yandex.practicum.filmorate.service.verifyService.IVerifyUser;
+import ru.yandex.practicum.filmorate.service.verifyService.verifies.VerifyUser;
 import ru.yandex.practicum.filmorate.storage.dao.FriendDao;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
@@ -20,37 +19,51 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
     private final UserDao userDao;
     private final FriendDao friendDao;
+    private final IVerifyUser verify;
 
     @Autowired
-    public UserService(UserDao userDao, FriendDao friendDao) {
+    public UserService(UserDao userDao, FriendDao friendDao, IVerifyUser verify) {
         this.userDao = userDao;
         this.friendDao = friendDao;
+        this.verify = verify;
     }
 
     // USER.Создать пользователя
     @Override
     public User create(User newUser) {
-        validateUserFields(newUser);
-        return userDao.create(newUser);
+        // Проверка
+        verify.validateUserFields(newUser);
+        // Создание пользователя
+        User user = userDao.create(newUser);
+        log.info("Пользователь создан id: {}", user.getId());
+        return user;
     }
 
     // USER.Обновить данные пользователя
     @Override
     public User update(User user) {
-        validateUserFields(user);
-        return userDao.update(user);
+        // Проверка
+        verify.validateUserFields(user);
+        // Обновление данных
+        User updatedUser = userDao.update(user);
+        log.info("Данные пользователя обновлены id: {}", updatedUser.getId());
+        return updatedUser;
     }
 
     // USER.Получить пользователя по id
     @Override
     public User getById(long id) {
-        return userDao.getById(id);
+        User user = userDao.getById(id);
+        log.info("Получен пользователь id: {}", id);
+        return user;
     }
 
     // USER.Удалить пользователя по id
     @Override
     public void deleteUser(long userId) {
-        verifyUserBeforeDelete(userId);
+        // Проверка
+        verify.verifyUserBeforeDelete(userId);
+        // Удаление
         userDao.deleteById(userId);
         log.info("пользователь удален id: {}", userId);
     }
@@ -58,33 +71,42 @@ public class UserService implements IUserService {
     // USER.Получить всех пользователей
     @Override
     public List<User> getAll() {
-        return userDao.getAll();
+        List<User> users = userDao.getAll();
+        log.info("Получен список пользователей.");
+        return users;
     }
 
     // FRIENDS.Добавить в друзья
     @Override
     public void addToFriends(long userId, long friendId) {
-        verifyUserBeforeCreate(userId, friendId);
-        boolean isCommon = verifyFriend(userId, friendId);
+        // Проверка
+        verify.verifyUserBeforeCreate(userId, friendId);
+        // Добавление
+        boolean isCommon = verify.verifyFriend(userId, friendId);
         friendDao.createFriendship(userId, friendId, isCommon);
+        log.info("Пользователи добавлены в друзья userId: {}, friendId: {}", userId, friendId);
     }
 
     // FRIENDS.Удалить из друзей
     @Override
     public void removeFromFriends(long userId, long friendId) {
-        verifyUserBeforeDeleteFriendship(userId, friendId);
+        // Проверка
+        verify.verifyUserBeforeDeleteFriendship(userId, friendId);
+        // Удаление
         friendDao.deleteFriendship(userId, friendId);
     }
 
     // FRIENDS.Получить список друзей
     @Override
     public List<User> getFriendsList(long userId) {
-        if (isUserExist(userId)) {
-            throw new NotFoundException("Пользователь отсутствует");
-        }
-        return friendDao.getAllFriendsRequests(userId).stream()
+        // Проверка
+        verify.verifyUserExist(userId);
+        // Получение
+        List<User> users = friendDao.getAllFriendsRequests(userId).stream()
                 .map(userDao::getById)
                 .collect(Collectors.toList());
+        log.info("Получен список пользователей в друзьях userId: {}", userId);
+        return users;
     }
 
     // FRIENDS.Получить список общих друзей
@@ -92,98 +114,13 @@ public class UserService implements IUserService {
     public List<User> getCommonFriends(long userId, long friendId) {
         List<Long> userIds = friendDao.getAllFriendsRequests(userId);
         List<Long> friendIds = friendDao.getAllFriendsRequests(friendId);
-        return userIds.stream()
+        List<User> users = userIds.stream()
                 .filter(friendIds::contains)
                 .map(userDao::getById)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-    }
-
-    // USER.Проверить поля на корректные переданные данные
-    private void validateUserFields(User user) {
-        if (user.getLogin().contains(" ")) {
-            log.info("Ошибка валидации логина userId: {}", user.getId());
-            throw new ValidationException("Ошибка валидации логина. Логин не может содержать пробелы");
-        }
-        if (!user.getEmail().matches("^[a-zA-Z0-9_+&*-]+(?:" +
-                "\\.[a-zA-Z0-9_+&*-]+)*" +
-                "@(?:[a-zA-Z0-9-]+" +
-                "\\.)+[a-zA-Z]{2,7}$")) {
-            log.info("Ошибка валидации e-mail userId: {}", user.getId());
-            throw new ValidationException("Ошибка валидации e-mail. Пример: example@example.com");
-        }
-        if (user.getName() == null || user.getName().trim().isEmpty()) {
-            log.info("Поле имени использует адрес эл.почты: {}", user.getEmail());
-            user.setName(user.getLogin());
-        }
-    }
-
-    // USER.Проверить пользователей перед добавлением в друзья
-    private void verifyUserBeforeCreate(long userId, long friendId) {
-        if (userId == friendId) {
-            log.info("Попытка удаления самого себя userId: {}", userId);
-            throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
-        }
-        if (isUserExist(userId)) {
-            log.info("Пользователь не найден userId: {}", userId);
-            throw new NotFoundException("Пользователь не найден");
-        }
-        if (isUserExist(friendId)) {
-            log.info("Пользователь не найден userId: {}", friendId);
-            throw new NotFoundException("Пользователь не найден");
-        }
-        if (verifyFriend(userId, friendId)) {
-            log.info("Попытка добавления в друзья повторно userId: {} , friendId: {} ", userId, friendId);
-            throw new NotFoundException("Пользователи уже в друзьях");
-        }
-    }
-
-    // USER.Проверить пользователей перед удалением из друзей
-    private void verifyUserBeforeDeleteFriendship(long userId, long friendId) {
-        if (userId == friendId) {
-            log.info("Попытка удаления самого себя userId: {}", userId);
-            throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
-        }
-        if (isUserExist(userId)) {
-            log.info("Пользователь не найден userId: {}", userId);
-            throw new NotFoundException("Пользователь не найден");
-        }
-        if (isUserExist(friendId)) {
-            log.info("Пользователь не найден userId: {}", friendId);
-            throw new NotFoundException("Пользователь не найден");
-        }
-        if (!verifyFriend(userId, friendId)) {
-            log.info("Попытка удаления из друзей userId: {} , friendId: {} ", userId, friendId);
-            throw new NotFoundException("Пользователи не в друзьях");
-        }
-    }
-
-    // USER.Проверить пользователя перед удалением
-    private void verifyUserBeforeDelete(long userId) {
-        if (isUserExist(userId)) {
-            log.info("Пользователь не найден userId: {}", userId);
-            throw new NotFoundException("Пользователь не найден");
-        }
-    }
-
-    // USER.Проверить статус дружбы у пользователей
-    private boolean verifyFriend(long userId, long friendId) {
-        try {
-            friendDao.getFriendsConnection(userId, friendId);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
-        }
-    }
-
-    // USER.Проверить есть ли пользователь с id в БД
-    private boolean isUserExist(long userId) {
-        try {
-            userDao.getById(userId);
-            return false;
-        } catch (EmptyResultDataAccessException e) {
-            return true;
-        }
+        log.info("Получен список общих друзей userId: {}", userId);
+        return users;
     }
 
 }

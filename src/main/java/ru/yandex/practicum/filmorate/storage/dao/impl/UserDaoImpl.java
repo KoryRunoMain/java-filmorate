@@ -61,7 +61,7 @@ public class UserDaoImpl implements UserDao {
         return getById(user.getId());
     }
 
-    // USER.Получитль пользователя по id из БД
+    // USER.Получить пользователя по id из БД
     @Override
     public User getById(long userId) {
         SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users " +
@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
     // USER.Получить список пользователей из БД
     @Override
     public List<User> getAll() {
-        String getAllQuery = "SELECT id, email, login, name, birthday, " +
+        String getAllQuery = "SELECT id, email, login, name, birthday " +
                 "FROM users";
         return jdbcTemplate.query(getAllQuery, this::mapRow);
     }

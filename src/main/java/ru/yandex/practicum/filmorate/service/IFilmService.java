@@ -10,7 +10,7 @@ public interface IFilmService extends IService<Film> {
 
     void removeLike(long filmId, long userId); // Удалить лайк у фильма
 
-    List<Film> getPopularFilms(int count); // Получить список популярных фильмов по кол-ву лайков (по умолчанию count = 10 фильмов)
+    List<Film> getPopularFilms(int count); // Получить список популярных фильмов
 
-    void deleteFilm(long filmId);
+    void deleteFilm(long filmId); // Удалить фильм
 }

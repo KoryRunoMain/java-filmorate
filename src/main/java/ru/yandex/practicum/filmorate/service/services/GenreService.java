@@ -2,12 +2,11 @@ package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.OperationNotFoundException;
 import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.service.IGenreService;
+import ru.yandex.practicum.filmorate.service.verifyService.IVerifyGenre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 
 import java.util.List;
@@ -16,10 +15,12 @@ import java.util.List;
 @Service
 public class GenreService implements IGenreService {
     private final GenreDao genreDao;
+    private final IVerifyGenre verify;
 
     @Autowired
-    public GenreService(GenreDao genreDao) {
+    public GenreService(GenreDao genreDao, IVerifyGenre verify) {
         this.genreDao = genreDao;
+        this.verify = verify;
     }
 
     // GENRE.Создать жанр
@@ -40,7 +41,7 @@ public class GenreService implements IGenreService {
     @Override
     public Genre getById(long id) {
         // Проверка
-        verifyGenre((int) id);
+        verify.verifyGenre((int) id);
         // Получение
         Genre genre = genreDao.getById((int) id);
         log.info("Получен жанр с id: {}", id);
@@ -53,15 +54,6 @@ public class GenreService implements IGenreService {
         List<Genre> genres = genreDao.getAll();
         log.info("Получен список жанров");
         return genres;
-    }
-
-    // GENRE.Проверить существует ли жанр в БД
-    private void verifyGenre(int genreId) {
-        try {
-            genreDao.getById(genreId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("Жанр c id " + genreId + " не найден.");
-        }
     }
 
 }

@@ -32,7 +32,7 @@ public class GenreDaoImpl implements GenreDao {
         return genre;
     }
 
-    // GENRE.Удалить жанр по id из БД
+    // GENRE.Удалить жанр у фильма по id из БД
     @Override
     public void deleteById(long filmId) {
         String deleteQuery = "DELETE FROM film_genre WHERE film_id=?";
@@ -52,7 +52,7 @@ public class GenreDaoImpl implements GenreDao {
     // GENRE.Добавить жанр к фильму в БД
     @Override
     public void addGenreToFilm(long filmId, Set<Genre> genres) {
-        String insertQuery = "INSERT INTO film_genre (film_id, genre_id)" +
+        String insertQuery = "INSERT INTO film_genre (film_id, genre_id) " +
                 "VALUES(?, ?)";
         for (Genre genre : genres) {
             jdbcTemplate.update(insertQuery, filmId, genre.getId());
@@ -71,7 +71,7 @@ public class GenreDaoImpl implements GenreDao {
     public Set<Genre> getFilmGenres(long filmId) {
         String selectQuery = "SELECT g.id, g.name " +
                 "FROM film_genre AS fg " +
-                "LEFT OUTER JOIN genres AS g ON fg.genre_id = g.id " +
+                "LEFT JOIN genres AS g ON fg.genre_id = g.id " +
                 "WHERE fg.film_id=? " +
                 "ORDER BY g.id";
         Set<Genre> genres = new LinkedHashSet<>(

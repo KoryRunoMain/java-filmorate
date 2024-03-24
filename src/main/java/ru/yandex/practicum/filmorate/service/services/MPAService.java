@@ -2,12 +2,12 @@ package ru.yandex.practicum.filmorate.service.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.OperationNotFoundException;
 import ru.yandex.practicum.filmorate.models.MPARating;
 import ru.yandex.practicum.filmorate.service.IMPAService;
+import ru.yandex.practicum.filmorate.service.verifyService.IVerifyMpa;
+import ru.yandex.practicum.filmorate.service.verifyService.verifies.VerifyMpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 
 import java.util.List;
@@ -16,10 +16,12 @@ import java.util.List;
 @Service
 public class MPAService implements IMPAService {
     private final MPADao mpaDao;
+    private final IVerifyMpa verify;
 
     @Autowired
-    public MPAService(MPADao mpaDao) {
+    public MPAService(MPADao mpaDao, IVerifyMpa verify) {
         this.mpaDao = mpaDao;
+        this.verify = verify;
     }
 
     // MPARating.Создать рейтинг
@@ -40,7 +42,7 @@ public class MPAService implements IMPAService {
     @Override
     public MPARating getById(long id) {
         // Проверка
-        verifyMpaRating((int) id);
+        verify.verifyMpaRating((int) id);
         // Получение
         MPARating mpaRating = mpaDao.getById((int) id);
         log.info("Получен рэйтинг с id: {}", id);
@@ -53,15 +55,6 @@ public class MPAService implements IMPAService {
         List<MPARating> mpaRatings = mpaDao.getAll();
         log.info("Получен список рэйтингов.");
         return mpaRatings;
-    }
-
-    // MPARating.Проверить существует ли рейтинг в БД
-    private void verifyMpaRating(int id) {
-        try {
-            mpaDao.getById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("Рейтинг c id " + id + " не найден.");
-        }
     }
 
 }
