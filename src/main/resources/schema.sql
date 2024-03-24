@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS films (
 	mpa_rating_id INTEGER, -- FK (table -> mpa_ratings, column -> id)
 	name VARCHAR(100) NOT NULL,
 	description VARCHAR(255) DEFAULT '',
-	releasedate DATE NOT NULL,
+	release_date DATE NOT NULL,
 	duration INTEGER NOT NULL
 );
 

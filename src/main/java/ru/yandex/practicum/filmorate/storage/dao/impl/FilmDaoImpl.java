@@ -26,7 +26,7 @@ public class FilmDaoImpl implements FilmDao {
     // FILM.Добавить фильм в БД
     @Override
     public Film create(Film film) {
-        String sqlQuery = "INSERT INTO films (mpa_rating_id, name, description, releasedate, duration) " +
+        String sqlQuery = "INSERT INTO films (mpa_rating_id, name, description, release_date, duration) " +
                 "VALUES(?, ?, ?, ?, ?)";
         jdbcTemplate.update(sqlQuery,
                 film.getMpa().getId(),
@@ -34,12 +34,12 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDescription(),
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration());
-        String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
+        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films " +
                 "WHERE mpa_rating_id=? " +
                 "AND name=? " +
                 "AND description=? " +
-                "AND releasedate=? " +
+                "AND release_date=? " +
                 "AND duration=?";
         Film newFilm = jdbcTemplate.queryForObject(selectQuery, new Object[]{
                 film.getMpa().getId(),
@@ -55,7 +55,7 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public Film update(Film film) {
         String updateQuery = "UPDATE films " +
-                "SET mpa_rating_id=?, name=?, description=?, releasedate=?, duration=? " +
+                "SET mpa_rating_id=?, name=?, description=?, release_date=?, duration=? " +
                 "WHERE id=?";
         jdbcTemplate.update(updateQuery,
                 film.getMpa().getId(),
@@ -72,7 +72,7 @@ public class FilmDaoImpl implements FilmDao {
     // FILM.Получить фильм по id из БД
     @Override
     public Film getById(long id) {
-        String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
+        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films " +
                 "WHERE id = ?";
         Film film = jdbcTemplate.queryForObject(selectQuery, new Object[]{id}, this::mapRow);
@@ -91,7 +91,7 @@ public class FilmDaoImpl implements FilmDao {
     // FILM.Получить список фильмов из БД
     @Override
     public List<Film> getAll() {
-        String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
+        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films";
         List<Film> films = jdbcTemplate.query(selectQuery, this::mapRow);
         log.info("Получен список фильмов.");
@@ -101,7 +101,7 @@ public class FilmDaoImpl implements FilmDao {
     // FILM.Получить список популярных фильмов из БД
     @Override
     public List<Film> getPopularFilms(int count) {
-        String selectQuery = "SELECT id, mpa_rating_id, name, description, releasedate, duration " +
+        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films AS f " +
                 "LEFT JOIN likes AS l ON f.id = l.film_id " +
                 "GROUP BY f.id " +
@@ -122,7 +122,7 @@ public class FilmDaoImpl implements FilmDao {
         film.setMpa(mpaRating);
         film.setName(resultSet.getString("name"));
         film.setDescription(resultSet.getString("description"));
-        film.setReleaseDate(resultSet.getDate("releasedate").toLocalDate());
+        film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
         film.setDuration(resultSet.getInt("duration"));
         return film;
     }
