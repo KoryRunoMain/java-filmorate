@@ -10,7 +10,7 @@ public interface FilmDao {
 
     Film update(Film film); // Обновить фильм
 
-    Film getById(long id); // Получить фильм по идентификатору
+    Film getById(long filmId); // Получить фильм по идентификатору
 
     void deleteById(long id); // Удалить фильм по идентификатору
 

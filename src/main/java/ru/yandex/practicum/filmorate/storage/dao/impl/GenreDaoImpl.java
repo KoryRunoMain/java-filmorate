@@ -3,11 +3,13 @@ package ru.yandex.practicum.filmorate.storage.dao.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
@@ -56,9 +58,13 @@ public class GenreDaoImpl implements GenreDao {
     public void addGenreToFilm(long filmId, Set<Genre> genres) {
         String insertQuery = "INSERT INTO film_genre (film_id, genre_id) " +
                 "VALUES(?, ?)";
-        for (Genre genre : genres) {
-            jdbcTemplate.update(insertQuery, filmId, genre.getId());
-        }
+        jdbcTemplate.batchUpdate(insertQuery,
+                genres,
+                genres.size(),
+                (PreparedStatement ps, Genre g) -> {
+                    ps.setLong(1, filmId);
+                    ps.setLong(2, g.getId());
+                });
     }
 
     // GENRE.Обновить жанры фильма в БД
