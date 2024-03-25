@@ -71,11 +71,11 @@ public class UserDaoImpl implements UserDao {
             throw new NotFoundException("Пользователь не найден.");
         }
         User user = new User(
-            userRow.getLong("id"),
-            userRow.getString("email"),
-            userRow.getString("login"),
-            userRow.getString("name"),
-            Objects.requireNonNull(userRow.getDate("birthday")).toLocalDate());
+                userRow.getLong("id"),
+                userRow.getString("email"),
+                userRow.getString("login"),
+                userRow.getString("name"),
+                Objects.requireNonNull(userRow.getDate("birthday")).toLocalDate());
         log.info("Найден пользователь: {} {}", user.getId(), user.getName());
         return user;
     }

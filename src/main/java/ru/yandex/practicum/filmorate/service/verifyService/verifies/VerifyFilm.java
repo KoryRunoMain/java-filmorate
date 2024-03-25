@@ -46,7 +46,7 @@ public class VerifyFilm implements IVerifyFilm {
 
     // VALUES.Проверить переданные значения фильма
     public void verifyPassedValuesFilm(long filmId) {
-        if(filmDao.getById(filmId) == null) {
+        if (filmDao.getById(filmId) == null) {
             log.trace("Фильм не найден. Передан null.");
             throw new NotFoundException("Фильм не найден.");
         }
