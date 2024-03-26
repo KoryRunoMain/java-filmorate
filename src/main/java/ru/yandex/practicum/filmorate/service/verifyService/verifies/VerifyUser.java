@@ -51,10 +51,6 @@ public class VerifyUser implements IVerifyUser {
 
     // USER.Проверить пользователей перед добавлением в друзья
     public void verifyUserBeforeCreate(long userId, long friendId) {
-        if (userId == friendId) {
-            log.info("Попытка удаления самого себя userId: {}", userId);
-            throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
-        }
         if (isUserExist(userId)) {
             log.info("Пользователь не найден userId: {}", userId);
             throw new NotFoundException("Пользователь не найден");
