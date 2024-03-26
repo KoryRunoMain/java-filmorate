@@ -3,35 +3,35 @@ package ru.yandex.practicum.filmorate.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class User implements Model {
 
-    private final Set<Long> friends = new HashSet<>();
-    private Long id;
-
-    @NotNull(message = "электронная почта не может быть null")
+    private final Set<Long> friends = new HashSet<>(); // идентификаторы пользователей в друзьях
+    @Positive
+    private Long id; // идентификатор пользователя
+    @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "электронная почта не может быть пустой")
-    private String email;
-
-    @NotNull(message = "логин не может быть null")
+    private String email; // адрес электронной почты
+    @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "логин не может быть пустым")
-    private String login;
-
-    private String name;
-
-    @NotNull(message = "дата рождения не может быть null")
+    private String login; // логин пользователя
+    private String name; // имя пользователя
+    @NotNull(message = "поле не может быть пустым")
     @Past(message = "дата рождения не может быть в будущем")
-    private LocalDate birthday;
+    private LocalDate birthday; // дата рождения
 
     public void addFriend(long userId) {
         this.friends.add(userId);

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,49 +14,46 @@ import java.util.Objects;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Film implements Model {
 
-    private final Set<Long> likes = new HashSet<>();
-    private Long id;
+    @Positive
+    private Long id; // идентификатор фильма
 
-    @NotNull(message = "название не может быть null")
+    @NotNull(message = "поле не может быть пустым")
     @NotBlank(message = "название не может быть пустым")
-    private String name;
+    private String name; // название фильма
 
-    @Size(max = 200, message = "максимальная длина описания — 200 символов")
-    @NotNull(message = "описание не может быть null")
-    private String description;
+    @NotNull(message = "поле не может быть пустым")
+    @Size(min = 1, max = 200, message = "минимальная длина описания - 1 символ, " +
+            "максимальная длина описания — 200 символов")
+    private String description; // описание фильма
 
-    @NotNull(message = "релиз не может быть null")
-    private LocalDate releaseDate;
+    @NotNull(message = "поле не может быть пустым")
+    private LocalDate releaseDate; // дата выхода фильма
 
-    @NotNull(message = "продолжительность не может быть null")
+    @NotNull(message = "поле не может быть пустым")
     @Positive(message = "продолжительность фильма должна быть положительной")
-    private long duration;
+    private long duration; // продолжительность фильма
 
+    @NotNull(message = "поле не может быть пустым")
+    private MPARating mpa; // значения оценок возрастного ограничения для фильма
 
-    public void addLike(long userId) {
-        this.likes.add(userId);
-    }
-
-    public void deleteLike(long userId) {
-        this.likes.remove(userId);
-    }
+    private Set<Genre> genres = new HashSet<>(); // жанры фильмов
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Film film = (Film) o;
-        return duration == film.duration
-                && Objects.equals(name, film.name)
-                && Objects.equals(description, film.description)
-                && Objects.equals(releaseDate, film.releaseDate);
+        return Objects.equals(id, film.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, releaseDate, duration);
+        return Objects.hash(id);
     }
 }
+
+

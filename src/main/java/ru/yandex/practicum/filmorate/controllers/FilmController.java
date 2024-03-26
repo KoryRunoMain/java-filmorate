@@ -5,30 +5,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.IFilmService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/films")
+@RequestMapping(value = "films")
 public class FilmController {
-    private final FilmService filmService;
+    private final IFilmService service;
 
     @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
+    public FilmController(IFilmService service) {
+        this.service = service;
     }
 
     // FILM.Получить список фильмов
     @GetMapping
     public List<Film> getAll() {
-        return filmService.getAll();
+        return service.getAll();
     }
 
     // FILM.Получить id фильма
     @GetMapping(value = "/{id}")
     public Film getId(@PathVariable long id) {
-        return filmService.getId(id);
+        return service.getById(id);
     }
 
     /*
@@ -37,36 +37,38 @@ public class FilmController {
     */
     @GetMapping(value = "/popular")
     public List<Film> getPopularFilms(@RequestParam(name = "count", defaultValue = "10") int count) {
-        return filmService.getPopularFilms(count);
+        return service.getPopularFilms(count);
     }
 
     // FILM.Создать фильм
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Validated
-                       @RequestBody Film film) {
-        return filmService.create(film);
+    public Film create(@Validated @RequestBody Film film) {
+        return service.create(film);
     }
 
-    // FILM.Создать или Обновить фильм
+    // FILM.Обновить фильм
     @PutMapping
-    public Film update(@Validated
-                       @RequestBody Film film) {
-        return filmService.update(film);
+    public Film update(@Validated @RequestBody Film film) {
+        return service.update(film);
     }
 
-    // FILM.Поставить лайк фильму
-    @PutMapping(value = "/{id}/like/{userId}")
-    public Film addLike(@PathVariable long id,
-                        @PathVariable long userId) {
-        return filmService.likeFilm(id, userId);
+    // LIKE.Поставить лайк фильму
+    @PutMapping(value = "/{filmId}/like/{userId}")
+    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
+        service.likeFilm(filmId, userId);
     }
 
-    // FILM.Удалить лайк
-    @DeleteMapping(value = "/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable long id,
-                           @PathVariable long userId) {
-        return filmService.removeLike(id, userId);
+    // LIKE.Удалить лайк
+    @DeleteMapping(value = "/{filmId}/like/{userId}")
+    public void deleteLike(@PathVariable long filmId, @PathVariable long userId) {
+        service.removeLike(filmId, userId);
+    }
+
+    // FILM.Удалить фильм
+    @DeleteMapping(value = "/{filmId}")
+    public void delete(@PathVariable long filmId) {
+        service.deleteFilm(filmId);
     }
 
 }

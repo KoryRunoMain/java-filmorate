@@ -5,75 +5,73 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.models.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.IUserService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-    private final UserService userService;
+    private final IUserService service;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(IUserService service) {
+        this.service = service;
     }
 
     // USER.Получить id пользователя
     @GetMapping(value = "/{id}")
-    public User getId(@Validated
-                      @PathVariable long id) {
-        return userService.getId(id);
+    public User getId(@Validated @PathVariable long id) {
+        return service.getById(id);
     }
 
     // USER.Получить список пользователей
     @GetMapping
     public List<User> getAll() {
-        return userService.getAll();
+        return service.getAll();
     }
 
-    // USER.Вернуть список пользователей, являющихся его друзьями
+    // FRIENDS.Вернуть список пользователей, являющихся его друзьями
     @GetMapping(value = "/{id}/friends")
-    public List<User> getFriends(@Validated
-                                 @PathVariable long id) {
-        return userService.getFriends(id);
+    public List<User> getFriends(@Validated @PathVariable long id) {
+        return service.getFriendsList(id);
     }
 
-    // USER. Вернуть список друзей, общих с другим пользователем
+    // FRIENDS. Вернуть список друзей, общих с другим пользователем
     @GetMapping(value = "/{id}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@Validated
-                                       @PathVariable long id,
-                                       @PathVariable long otherId) {
-        return userService.getCommonFriends(id, otherId);
+    public List<User> getCommonFriends(@Validated @PathVariable long id, @PathVariable long otherId) {
+        return service.getCommonFriends(id, otherId);
     }
 
     // USER.Создать пользователя
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Validated
-                       @RequestBody User user) {
-        return userService.create(user);
+    public User create(@Validated @RequestBody User user) {
+        return service.create(user);
     }
 
     // USER.Создать или Обновить пользователя
     @PutMapping
-    public User update(@Validated
-                       @RequestBody User user) {
-        return userService.update(user);
+    public User update(@Validated @RequestBody User user) {
+        return service.update(user);
     }
 
-    // USER.Добавить в друзья
-    @PutMapping(value = "/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable long id,
-                          @PathVariable long friendId) {
-        return userService.addToFriends(id, friendId);
+    // FRIENDS.Добавить в друзья
+    @PutMapping(value = "/{userId}/friends/{friendId}")
+    public void addFriend(@PathVariable long userId, @PathVariable long friendId) {
+        service.addToFriends(userId, friendId);
     }
 
-    // USER.Удалить из друзей
-    @DeleteMapping(value = "/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable long id,
-                             @PathVariable long friendId) {
-        return userService.removeFromFriends(id, friendId);
+    // FRIENDS.Удалить из друзей
+    @DeleteMapping(value = "/{userId}/friends/{friendId}")
+    public void deleteFriend(@PathVariable long userId, @PathVariable long friendId) {
+        service.removeFromFriends(userId, friendId);
+    }
+
+    // USER.Удалить пользователя
+    @DeleteMapping(value = "/{userId}")
+    public void delete(@PathVariable long userId) {
+        service.deleteUser(userId);
     }
 
 }
