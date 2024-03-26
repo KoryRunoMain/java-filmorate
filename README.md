@@ -147,7 +147,7 @@
 - Добавить фильм
 
 ```sql
-INSERT INTO films (mpa_rating_id, name, description, releasedate, duration)
+INSERT INTO films (mpa_rating_id, name, description, release_date, duration)
 VALUES(?, ?, ?, ?, ?);
 ```
 
@@ -155,14 +155,14 @@ VALUES(?, ?, ?, ?, ?);
 
 ```sql
 UPDATE films
-SET mpa_rating_id=?, name=?, description=?, releasedate=?, duration=?
+SET mpa_rating_id=?, name=?, description=?, release_date=?, duration=?
 WHERE id=?;
 ```
 
 - Получить фильм по id
 
 ```sql
-SELECT id, mpa_rating_id, name, description, releasedate, duration
+SELECT id, mpa_rating_id, name, description, release_date, duration
 FROM films
 WHERE id = ?;
 ```
@@ -177,14 +177,14 @@ WHERE id=?;
 - Получить список фильмов
 
 ```sql
-SELECT id, mpa_rating_id, name, description, releasedate, duration
+SELECT id, mpa_rating_id, name, description, release_date, duration
 FROM films;
 ```
 
 - Получить список популярных фильмов
 
 ```sql
-SELECT id, mpa_rating_id, name, description, releasedate, duration
+SELECT id, mpa_rating_id, name, description, release_date, duration
 FROM films AS f
 LEFT JOIN likes AS l ON f.id = l.film_id
 GROUP BY f.id
