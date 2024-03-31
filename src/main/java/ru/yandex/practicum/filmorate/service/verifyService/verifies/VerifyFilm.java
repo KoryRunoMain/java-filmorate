@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.service.verifyService.IVerifyFilm;
 import ru.yandex.practicum.filmorate.storage.dao.*;
 
@@ -20,13 +21,17 @@ public class VerifyFilm implements IVerifyFilm {
     private final FilmDao filmDao;
     private final MPADao mpaDao;
     private final UserDao userDao;
+    private final GenreDao genreDao;
 
     @Autowired
     public VerifyFilm(FilmDao filmDao, LikeDao likeDao, MPADao mpaDao, GenreDao genreDao, UserDao userDao) {
         this.filmDao = filmDao;
         this.mpaDao = mpaDao;
         this.userDao = userDao;
+        this.genreDao = genreDao;
     }
+
+    ////////
 
     // FILM.Проверить переданное значение для получения списка популярных фильмов
     public void verifyPopularFilmList(int count) {
@@ -74,6 +79,12 @@ public class VerifyFilm implements IVerifyFilm {
             log.info("Рейтинг не найден mpaId: {}", film.getMpa().getId());
             throw new ValidationException("Рейтинг не найден.");
         }
+        for (Genre genre : film.getGenres()) {
+            if (!isGenreExist(Math.toIntExact(genre.getId()))) {
+                log.info("Жанр не найден genreId: {}", genre.getId());
+                throw new ValidationException("Жанр не найден.");
+            }
+        }
     }
 
     // FILM.Проверить фильм перед обновлением
@@ -81,6 +92,12 @@ public class VerifyFilm implements IVerifyFilm {
         if (!filmDao.getAll().contains(film)) {
             log.info("Фильм отсутствует id: {}", film.getId());
             throw new NotFoundException("Фильм отсутствует.");
+        }
+        for (Genre genre : film.getGenres()) {
+            if (!isGenreExist(Math.toIntExact(genre.getId()))) {
+                log.info("Жанр не найден genreId: {}", genre.getId());
+                throw new ValidationException("Жанр не найден.");
+            }
         }
     }
 
@@ -96,6 +113,16 @@ public class VerifyFilm implements IVerifyFilm {
     public boolean isMpaExist(int id) {
         try {
             mpaDao.getById(id);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+    // GENRE.Проверить есть ли Genre с id в БД
+    public boolean isGenreExist(int id) {
+        try {
+            genreDao.getById(id);
             return true;
         } catch (EmptyResultDataAccessException e) {
             return false;
