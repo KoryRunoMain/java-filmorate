@@ -17,6 +17,7 @@ public class VerifyMpaRating implements IVerifyMpa {
     }
 
     // MPARating.Проверить рейтинг в БД
+    @Override
     public void verifyMpaRating(int id) {
         try {
             mpaDao.getById(id);

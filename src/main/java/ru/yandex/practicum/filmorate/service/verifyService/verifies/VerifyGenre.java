@@ -17,6 +17,7 @@ public class VerifyGenre implements IVerifyGenre {
     }
 
     // GENRE.Проверить жанр в БД
+    @Override
     public void verifyGenre(int genreId) {
         try {
             genreDao.getById(genreId);

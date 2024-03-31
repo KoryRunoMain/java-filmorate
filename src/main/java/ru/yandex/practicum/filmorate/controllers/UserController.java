@@ -58,18 +58,21 @@ public class UserController {
 
     // FRIENDS.Добавить в друзья
     @PutMapping(value = "/{userId}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
     public void addFriend(@PathVariable long userId, @PathVariable long friendId) {
         service.addToFriends(userId, friendId);
     }
 
     // FRIENDS.Удалить из друзей
     @DeleteMapping(value = "/{userId}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteFriend(@PathVariable long userId, @PathVariable long friendId) {
         service.removeFromFriends(userId, friendId);
     }
 
     // USER.Удалить пользователя
     @DeleteMapping(value = "/{userId}")
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable long userId) {
         service.deleteUser(userId);
     }

@@ -20,4 +20,6 @@ public interface IVerifyFilm {
 
     boolean isMpaExist(int id); // Проверить есть ли MpaRating с id в БД
 
+    boolean isGenreExist(int id); // Проверить если ли Genre с id в БД
+
 }
