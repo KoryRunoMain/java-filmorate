@@ -31,9 +31,8 @@ public class VerifyFilm implements IVerifyFilm {
         this.genreDao = genreDao;
     }
 
-    ////////
-
     // FILM.Проверить переданное значение для получения списка популярных фильмов
+    @Override
     public void verifyPopularFilmList(int count) {
         if (count < TOP_FILM_LIST_MINIMAL) {
             log.info("Передан неверный count: {}, count не может быть меньше заданного значения TOP_FILM_LIST_MINIMAL.", count);
@@ -42,6 +41,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // FILM.Проверить поля на корректные переданные данные
+    @Override
     public void validateFilmFields(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             log.info("Ошибка валидации даты релиза.");
@@ -50,6 +50,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // VALUES.Проверить переданные значения фильма
+    @Override
     public void verifyPassedValuesFilm(long filmId) {
         if (filmDao.getById(filmId) == null) {
             log.trace("Фильм не найден. Передан null.");
@@ -58,6 +59,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // VALUES.Проверить переданные значения пользователя
+    @Override
     public void verifyPassedValuesUser(long userId) {
         if (userDao.getById(userId) == null) {
             log.trace("Пользователь не найден. Передан null.");
@@ -70,6 +72,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // FILM.Проверить фильм перед добавлением
+    @Override
     public void verifyBeforeCreateFilm(Film film) {
         if (filmDao.getAll().contains(film)) {
             log.info("Фильм уже существует id: {}", film.getId());
@@ -88,6 +91,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // FILM.Проверить фильм перед обновлением
+    @Override
     public void verifyBeforeUpdateFilm(Film film) {
         if (!filmDao.getAll().contains(film)) {
             log.info("Фильм отсутствует id: {}", film.getId());
@@ -102,6 +106,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // FILM.Проверить фильм перед удалением
+    @Override
     public void verifyBeforeDeleteFilm(Film film) {
         if (!filmDao.getAll().contains(film)) {
             log.info("Фильм отсутствует id: {}", film.getId());
@@ -110,6 +115,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // FILM.Проверить есть ли MpaRating с id в БД
+    @Override
     public boolean isMpaExist(int id) {
         try {
             mpaDao.getById(id);
@@ -120,6 +126,7 @@ public class VerifyFilm implements IVerifyFilm {
     }
 
     // GENRE.Проверить есть ли Genre с id в БД
+    @Override
     public boolean isGenreExist(int id) {
         try {
             genreDao.getById(id);
