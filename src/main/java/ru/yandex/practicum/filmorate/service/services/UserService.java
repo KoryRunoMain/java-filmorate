@@ -79,7 +79,7 @@ public class UserService implements IUserService {
     @Override
     public void addToFriends(long userId, long friendId) {
         // Проверка
-        verify.verifyUserBeforeCreate(userId, friendId);
+        verify.verifyUserBeforeCreateFriendship(userId, friendId);
         // Добавление
         boolean isCommon = verify.verifyFriend(userId, friendId);
         friendDao.createFriendship(userId, friendId, isCommon);
@@ -91,6 +91,11 @@ public class UserService implements IUserService {
     public void removeFromFriends(long userId, long friendId) {
         // Проверка
         verify.verifyUserBeforeDeleteFriendship(userId, friendId);
+        if (!verify.verifyFriend(userId, friendId)) {
+            log.info("Попытка удаления из друзей userId: {} , friendId: {} ", userId, friendId
+                    + " Пользователи не в друзьях.");
+            return;
+        }
         // Удаление
         friendDao.deleteFriendship(userId, friendId);
     }

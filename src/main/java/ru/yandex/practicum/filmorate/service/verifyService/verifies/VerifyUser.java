@@ -24,13 +24,15 @@ public class VerifyUser implements IVerifyUser {
     }
 
     // USER.Проверить пользователя
+    @Override
     public void verifyUserExist(long userId) {
-        if (isUserExist(userId)) {
+        if (isUserNotExist(userId)) {
             throw new NotFoundException("Пользователь отсутствует");
         }
     }
 
     // USER.Проверить поля на корректные переданные данные
+    @Override
     public void validateUserFields(User user) {
         if (user.getLogin().contains(" ")) {
             log.info("Ошибка валидации логина userId: {}", user.getId());
@@ -50,12 +52,13 @@ public class VerifyUser implements IVerifyUser {
     }
 
     // USER.Проверить пользователей перед добавлением в друзья
-    public void verifyUserBeforeCreate(long userId, long friendId) {
-        if (isUserExist(userId)) {
+    @Override
+    public void verifyUserBeforeCreateFriendship(long userId, long friendId) {
+        if (isUserNotExist(userId)) {
             log.info("Пользователь не найден userId: {}", userId);
             throw new NotFoundException("Пользователь не найден");
         }
-        if (isUserExist(friendId)) {
+        if (isUserNotExist(friendId)) {
             log.info("Пользователь не найден userId: {}", friendId);
             throw new NotFoundException("Пользователь не найден");
         }
@@ -66,34 +69,33 @@ public class VerifyUser implements IVerifyUser {
     }
 
     // USER.Проверить пользователей перед удалением из друзей
+    @Override
     public void verifyUserBeforeDeleteFriendship(long userId, long friendId) {
         if (userId == friendId) {
             log.info("Попытка удаления самого себя userId: {}", userId);
             throw new ValidationException("Пользователь не может удалить сам себя из друзей.");
         }
-        if (isUserExist(userId)) {
+        if (isUserNotExist(userId)) {
             log.info("Пользователь не найден userId: {}", userId);
             throw new NotFoundException("Пользователь не найден");
         }
-        if (isUserExist(friendId)) {
+        if (isUserNotExist(friendId)) {
             log.info("Пользователь не найден userId: {}", friendId);
             throw new NotFoundException("Пользователь не найден");
-        }
-        if (!verifyFriend(userId, friendId)) {
-            log.info("Попытка удаления из друзей userId: {} , friendId: {} ", userId, friendId);
-            throw new NotFoundException("Пользователи не в друзьях");
         }
     }
 
     // USER.Проверить пользователя перед удалением
+    @Override
     public void verifyUserBeforeDelete(long userId) {
-        if (isUserExist(userId)) {
+        if (isUserNotExist(userId)) {
             log.info("Пользователь не найден userId: {}", userId);
             throw new NotFoundException("Пользователь не найден");
         }
     }
 
     // USER.Проверить статус дружбы у пользователей
+    @Override
     public boolean verifyFriend(long userId, long friendId) {
         try {
             friendDao.getFriendsConnection(userId, friendId);
@@ -104,7 +106,8 @@ public class VerifyUser implements IVerifyUser {
     }
 
     // USER.Проверить есть ли пользователь с id в БД
-    public boolean isUserExist(long userId) {
+    @Override
+    public boolean isUserNotExist(long userId) {
         try {
             userDao.getById(userId);
             return false;

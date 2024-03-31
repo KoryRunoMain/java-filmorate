@@ -8,7 +8,7 @@ public interface IVerifyUser {
 
     void validateUserFields(User user); // Проверить поля на корректные переданные данные
 
-    void verifyUserBeforeCreate(long userId, long friendId); // Проверить пользователей перед добавлением в друзья
+    void verifyUserBeforeCreateFriendship(long userId, long friendId); // Проверить пользователей перед добавлением в друзья
 
     void verifyUserBeforeDeleteFriendship(long userId, long friendId); // Проверить пользователей перед удалением из друзей
 
@@ -16,6 +16,6 @@ public interface IVerifyUser {
 
     boolean verifyFriend(long userId, long friendId); // Проверить статус дружбы у пользователей
 
-    boolean isUserExist(long userId); // Проверить есть ли пользователь с id в БД
+    boolean isUserNotExist(long userId); // Проверить есть ли пользователь с id в БД
 
 }
