@@ -47,7 +47,7 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDescription(),
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration()}, this::mapRow);
-        log.info("Фильм добавлен в БД id: {}", newFilm);
+        log.info("Метод: create | Фильм добавлен в БД id: {}", newFilm);
         return newFilm;
     }
 
@@ -65,7 +65,7 @@ public class FilmDaoImpl implements FilmDao {
                 film.getDuration(),
                 film.getId());
         Film updatedFilm = getById(film.getId());
-        log.info("Фильм обновлен в БД id: {}", updatedFilm);
+        log.info("Метод: update | Фильм обновлен в БД id: {}", updatedFilm);
         return updatedFilm;
     }
 
@@ -76,7 +76,7 @@ public class FilmDaoImpl implements FilmDao {
                 "FROM films " +
                 "WHERE id = ?";
         Film film = jdbcTemplate.queryForObject(selectQuery, new Object[]{id}, this::mapRow);
-        log.info("Получен фильм с id: {}", id);
+        log.info("Метод: getById | Получен фильм с id: {}", id);
         return film;
     }
 
@@ -85,7 +85,7 @@ public class FilmDaoImpl implements FilmDao {
     public void deleteById(long id) {
         String deleteQuery = "DELETE FROM films WHERE id=?";
         jdbcTemplate.queryForRowSet(deleteQuery, id);
-        log.info("Фильм удален id: {}", id);
+        log.info("Метод: deleteById | Фильм удален id: {}", id);
     }
 
     // FILM.Получить список фильмов из БД
@@ -94,7 +94,7 @@ public class FilmDaoImpl implements FilmDao {
         String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films";
         List<Film> films = jdbcTemplate.query(selectQuery, this::mapRow);
-        log.info("Получен список фильмов.");
+        log.info("Метод: getAll | Получен список фильмов.");
         return films;
     }
 
@@ -108,7 +108,7 @@ public class FilmDaoImpl implements FilmDao {
                 "ORDER BY COUNT(l.user_id) DESC " +
                 "LIMIT ?";
         List<Film> film = jdbcTemplate.query(selectQuery, new Object[]{count}, this::mapRow);
-        log.info("Получен список популярных фильмов.");
+        log.info("Метод: getPopularFilms | Получен список популярных фильмов.");
         return film;
     }
 

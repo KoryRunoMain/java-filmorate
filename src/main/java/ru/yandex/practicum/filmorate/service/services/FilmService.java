@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
 import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,14 +85,13 @@ public class FilmService implements IFilmService {
         verify.verifyPassedValuesFilm(filmId);
         // Получение фильма
         Film film = filmDao.getById(filmId);
-        film.setMpa(mpaDao.getById(Math.toIntExact(film.getMpa().getId())));
-        if (film.getGenres().isEmpty()) {
-            film.setGenres(Collections.emptySet());
-            log.info("Установлены пустые жанры");
-        } else {
-            film.setGenres(genreDao.getFilmGenres(film.getId()));
+        if (!film.getGenres().isEmpty()) {
+            film.setGenres(genreDao.getFilmGenres(filmId));
             log.info("Установлены жанры genres {}", genreDao.getFilmGenres(film.getId()));
         }
+        film.setMpa(mpaDao.getById(Math.toIntExact(film.getMpa().getId())));
+        film.setGenres(Collections.emptySet());
+        log.info("Установлены пустые жанры");
         log.info("Фильм по id: {} получен.", film.getId());
         return film;
     }

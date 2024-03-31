@@ -76,7 +76,7 @@ public class GenreDaoImpl implements GenreDao {
     // GENRE.Получить жанры фильма из БД
     @Override
     public Set<Genre> getFilmGenres(long filmId) {
-        String selectQuery = "SELECT g.id, g.name " +
+        String selectQuery = "SELECT DISTINCT g.id, g.name " +
                 "FROM film_genre AS fg " +
                 "LEFT JOIN genres AS g ON fg.genre_id = g.id " +
                 "WHERE fg.film_id=? " +
