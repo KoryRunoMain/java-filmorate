@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -55,7 +54,6 @@ public class Film implements Model {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }
 
 
