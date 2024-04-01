@@ -91,9 +91,11 @@ public class UserDaoImpl implements UserDao {
     // USER.Удалить пользователя по id из БД
     @Override
     public void deleteById(long userId) {
-        String deleteQuery = "DELETE FROM users " +
-                "WHERE id=?";
-        jdbcTemplate.queryForRowSet(deleteQuery, userId);
+        String deleteQuery = "DELETE FROM users WHERE id=?";
+        int row = jdbcTemplate.update(deleteQuery, userId);
+        if (row <= 0) {
+            log.info("Пользователь с идентификатором {} не найден.", userId);
+        }
         log.info("Пользователь с идентификатором {} был удален.", userId);
     }
 

@@ -52,6 +52,7 @@ public class UserController {
 
     // USER.Создать или Обновить пользователя
     @PutMapping
+    @ResponseStatus(HttpStatus.OK)
     public User update(@Validated @RequestBody User user) {
         return service.update(user);
     }
