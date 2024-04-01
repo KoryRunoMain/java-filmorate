@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -55,18 +56,6 @@ public class Film implements Model {
         return Objects.hash(id);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Film film = (Film) o;
-//        return Objects.equals(id, film.id) && Objects.equals(name, film.name);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name);
-//    }
 }
 
 

@@ -3,24 +3,33 @@ package ru.yandex.practicum.filmorate.storage.dao.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.models.Film;
+import ru.yandex.practicum.filmorate.models.Genre;
 import ru.yandex.practicum.filmorate.models.MPARating;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDao;
+import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Slf4j
 @Repository
 @Primary
 public class FilmDaoImpl implements FilmDao {
     private final JdbcTemplate jdbcTemplate;
+    private final GenreDao genreDao;
 
-    public FilmDaoImpl(JdbcTemplate jdbcTemplate) {
+    public FilmDaoImpl(JdbcTemplate jdbcTemplate, GenreDao genreDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.genreDao = genreDao;
     }
 
     // FILM.Добавить фильм в БД
@@ -69,14 +78,25 @@ public class FilmDaoImpl implements FilmDao {
         return updatedFilm;
     }
 
+//    // FILM.Получить фильм по id из БД
+//    @Override
+//    public Film getById(long filmId) {
+//        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
+//                "FROM films " +
+//                "WHERE id = ?";
+//        Film film = jdbcTemplate.queryForObject(selectQuery, new Object[]{filmId}, this::mapRow);
+//        log.info("Метод: getById | Получен фильм с id: {}", filmId);
+//        return film;
+//    }
+
     // FILM.Получить фильм по id из БД
     @Override
-    public Film getById(long id) {
+    public Film getById(long filmId) {
         String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
                 "FROM films " +
                 "WHERE id = ?";
-        Film film = jdbcTemplate.queryForObject(selectQuery, new Object[]{id}, this::mapRow);
-        log.info("Метод: getById | Получен фильм с id: {}", id);
+        Film film = jdbcTemplate.queryForObject(selectQuery, this::mapRow, filmId);
+        log.info("Метод: getById | Получен фильм с id: {}", filmId);
         return film;
     }
 
@@ -98,6 +118,20 @@ public class FilmDaoImpl implements FilmDao {
         return films;
     }
 
+//    // FILM.Получить список популярных фильмов из БД
+//    @Override
+//    public List<Film> getPopularFilms(int count) {
+//        String selectQuery = "SELECT id, mpa_rating_id, name, description, release_date, duration " +
+//                "FROM films AS f " +
+//                "LEFT JOIN likes AS l ON f.id = l.film_id " +
+//                "GROUP BY f.id " +
+//                "ORDER BY COUNT(l.user_id) DESC " +
+//                "LIMIT ?";
+//        List<Film> film = jdbcTemplate.query(selectQuery, new Object[]{count}, this::mapRow);
+//        log.info("Метод: getPopularFilms | Получен список популярных фильмов.");
+//        return film;
+//    }
+
     // FILM.Получить список популярных фильмов из БД
     @Override
     public List<Film> getPopularFilms(int count) {
@@ -107,7 +141,7 @@ public class FilmDaoImpl implements FilmDao {
                 "GROUP BY f.id " +
                 "ORDER BY COUNT(l.user_id) DESC " +
                 "LIMIT ?";
-        List<Film> film = jdbcTemplate.query(selectQuery, new Object[]{count}, this::mapRow);
+        List<Film> film = jdbcTemplate.query(selectQuery, this::mapRow, count);
         log.info("Метод: getPopularFilms | Получен список популярных фильмов.");
         return film;
     }
@@ -124,6 +158,8 @@ public class FilmDaoImpl implements FilmDao {
         film.setDescription(resultSet.getString("description"));
         film.setReleaseDate(resultSet.getDate("release_date").toLocalDate());
         film.setDuration(resultSet.getInt("duration"));
+        film.setGenres(genreDao.getFilmGenres(film.getId()));
+        log.info("Метод: mapRow | Данные фильма отображены на обьекте FILM: {}", film);
         return film;
     }
 
