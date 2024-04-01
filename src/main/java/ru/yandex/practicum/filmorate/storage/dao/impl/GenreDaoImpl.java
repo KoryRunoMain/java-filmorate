@@ -96,7 +96,7 @@ public class GenreDaoImpl implements GenreDao {
                 "LEFT JOIN genres AS g ON fg.genre_id = g.id " +
                 "WHERE fg.film_id=? " +
                 "ORDER BY g.id";
-        Set<Genre> genres = new LinkedHashSet<>(
+        Set<Genre> genres = new TreeSet<>(
                 jdbcTemplate.query(selectQuery, this::mapRow, filmId)
         );
         log.info("Метод: getFilmGenres | Получены все жанры фильма id {}, genres: {}", filmId, genres);

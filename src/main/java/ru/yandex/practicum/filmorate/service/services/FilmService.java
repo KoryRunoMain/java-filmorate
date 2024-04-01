@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
 import ru.yandex.practicum.filmorate.storage.dao.MPADao;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,28 +52,12 @@ public class FilmService implements IFilmService {
         Film newFilm = filmDao.create(film);
         Set<Genre> genres = film.getGenres();
         if (genres != null && !genres.isEmpty()) {
-            genreDao.addGenreToFilm(newFilm.getId(), genres);
             newFilm.setGenres(genreDao.getFilmGenres(newFilm.getId()));
             log.info("Метод create | Жанры успешно добавлены к фильму genres: {}", genres);
         }
         log.info("Метод create | Фильм успешно создан. film: {}", film);
         return newFilm;
     }
-
-//    // FILM.Обновить фильм
-//    @Override
-//    public Film update(Film film) {
-//        // Проверки
-//        verify.validateFilmFields(film);
-//        verify.verifyBeforeUpdateFilm(film);
-//        // Обновление фильма
-//        Film updatedFilm = filmDao.update(film);
-//        genreDao.updateFilmGenres(updatedFilm.getId(), film.getGenres());
-//        updatedFilm.setMpa(mpaDao.getById(Math.toIntExact(updatedFilm.getMpa().getId())));
-//        updatedFilm.setGenres(genreDao.getFilmGenres(updatedFilm.getId()));
-//        log.info("Фильм успешно обновлен.");
-//        return updatedFilm;
-//    }
 
     // FILM.Обновить фильм
     @Override
@@ -82,9 +67,13 @@ public class FilmService implements IFilmService {
         verify.verifyBeforeUpdateFilm(film);
         // Обновление фильма
         Film updatedFilm = filmDao.update(film);
-        genreDao.updateFilmGenres(updatedFilm.getId(), film.getGenres());
+        Set<Genre> genres = updatedFilm.getGenres();
+        if (genres != null && !genres.isEmpty()) {
+            genreDao.updateFilmGenres(updatedFilm.getId(), genres);
+            film.setGenres(genreDao.getFilmGenres(updatedFilm.getId()));
+            log.info("Метод create | Жанры успешно добавлены к фильму genres: {}", genres);
+        }
         updatedFilm.setMpa(mpaDao.getById(Math.toIntExact(updatedFilm.getMpa().getId())));
-        updatedFilm.setGenres(genreDao.getFilmGenres(updatedFilm.getId()));
         log.info("Метод update | Фильм успешно обновлен.");
         return updatedFilm;
     }
